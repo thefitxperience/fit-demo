@@ -1,0 +1,15 @@
+node_modules/
+.DS_Store
+android/build/
+android/.gradle/
+android/app/build/
+android/local.properties
+*.apk
+www/
+electron-app/dist/
+electron-app/node_modules/
+electron-app/dist/
+electron-app/node_modules/
+android/build/
+android/app/build/
+.git.backup/

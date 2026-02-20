@@ -1,0 +1,4197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIT Diet Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            min-height: 100vh;
+            color: #1a202c;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body.summary-active {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Landscape mode lock */
+        .portrait-lock {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1B3448;
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .portrait-lock svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+            animation: rotate 2s ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(90deg); }
+        }
+
+        .portrait-lock h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .portrait-lock p {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        @media (orientation: portrait) {
+            .portrait-lock {
+                display: flex;
+            }
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/background.png') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Selection Page Styles */
+        .selection-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .selection-page.hidden {
+            display: none;
+        }
+
+        .selection-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .selection-options {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .selection-card {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-width: 280px;
+        }
+
+        .selection-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .selection-card img {
+            height: 35px;
+            width: auto;
+            object-fit: contain;
+            opacity: 1;
+            filter: none;
+        }
+
+        .selection-card-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            text-align: center;
+        }
+
+        /* Header Back Link */
+        .header-back {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(91, 159, 164, 0.3);
+        }
+
+        .header-back svg {
+            width: 16px;
+            height: 16px;
+        }
+
+
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 0.65rem 2rem;
+            padding-top: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: none;
+        }
+
+        .header.visible {
+            display: flex;
+        }
+
+        /* Fade Transitions */
+        .fade-out {
+            animation: fadeOut 0.4s ease-out forwards;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-in forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            height: 45px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 20px;
+            background: #e2e8f0;
+            margin: 0 0.5rem;
+        }
+
+        .demo-badge {
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 91px);
+            padding: 1rem 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .container.hidden {
+            display: none;
+        }
+
+        .container.app-mode {
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1100px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .container.app-mode .main-content {
+            grid-template-columns: 450px 1fr;
+            max-width: 1600px;
+            gap: 2rem;
+        }
+
+        /* Transition to summary page animation */
+        .form-card.transitioning-to-summary {
+            animation: shrinkToLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .preview-panel.revealing {
+            animation: revealFromRight 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes shrinkToLeft {
+            0% {
+                transform: scale(1) translateX(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(0.95) translateX(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1) translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes revealFromRight {
+            0% {
+                opacity: 0;
+                transform: translateX(50px) scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+            transform-origin: center center;
+        }
+
+        .form-card.step-transitioning-zoom-in {
+            animation: zoomInTransition 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-card.step-transitioning-zoom-out {
+            animation: zoomOutTransition 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes zoomInTransition {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomOutTransition {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .container.app-mode .form-card {
+            padding: 1.75rem 2rem;
+        }
+
+        .form-card.summary-mode .form-header,
+        .form-card.summary-mode .step-progress,
+        .form-card.summary-mode .step-content {
+            display: none;
+        }
+
+        .form-card.summary-mode form {
+            display: none;
+        }
+
+        .form-card.summary-mode .final-summary-panel {
+            display: block;
+        }
+
+        body.summary-active .container {
+            height: calc(100vh - 60px);
+            overflow: hidden;
+        }
+
+        body.summary-active .main-content {
+            height: 100%;
+            overflow: hidden;
+            align-items: flex-start;
+        }
+
+        body.summary-active .form-card {
+            height: auto;
+            max-height: 100%;
+            overflow: visible;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.summary-active .form-content {
+            flex: 0 1 auto;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+        }
+
+        body.summary-active .final-summary-panel {
+            overflow-y: auto;
+            height: auto;
+            max-height: 100%;
+        }
+
+        body.summary-active .preview-panel {
+            height: calc(100% - 20px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .final-summary-panel {
+            display: none;
+        }
+
+        /* Form content layout */
+        .form-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .container.app-mode .form-content {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .container.app-mode .form-section {
+            gap: 0;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.5s ease;
+            grid-column: 1 / -1;
+        }
+
+        .container.app-mode .form-header {
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .form-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .container.app-mode .form-title {
+            font-size: 1.4rem;
+        }
+
+        .form-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .container.app-mode .form-subtitle {
+            font-size: 0.95rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .container.app-mode .form-group {
+            margin-bottom: 0.6rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.85rem;
+        }
+        
+        label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        /* Summary Panel */
+        .summary-panel {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .final-summary-panel {
+            padding: 0;
+        }
+
+        .final-summary-panel .summary-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .summary-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .summary-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #5B9FA4;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 0.4rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .summary-value {
+            font-size: 0.8rem;
+            color: #1a202c;
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .summary-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.25rem;
+        }
+
+        .summary-list {
+            font-size: 0.75rem;
+            color: #1a202c;
+            font-weight: 600;
+            text-align: right;
+            line-height: 1.4;
+        }
+
+        .summary-list-item {
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            color: #1a202c;
+        }
+
+        input::placeholder {
+            color: #cbd5e1;
+            opacity: 1;
+        }
+
+        select {
+            color: #64748b;
+        }
+
+        select:focus,
+        select:valid {
+            color: #1a202c;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #5B9FA4;
+            box-shadow: 0 0 0 3px rgba(91, 159, 164, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        /* Radio Button Styles */
+        .radio-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.25rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #7AB8BD 0%, #3D5F75 100%);
+            color: white;
+            border-color: #7AB8BD;
+        }
+
+        .radio-option label:hover {
+            border-color: #7AB8BD;
+            background: #f0f8f9;
+        }
+
+        .radio-option input[type="radio"]:checked + label:hover {
+            background: linear-gradient(135deg, #7AB8BD 0%, #3D5F75 100%);
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            display: none;
+            background: white;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 20px;
+        }
+
+        .container.app-mode .preview-panel {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .preview-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-top: -0.4rem;
+            padding-top: 0;
+        }
+
+        .preview-badges {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: -0.4rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+        }
+
+        /* Loading State */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 500px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f1f5f9;
+            border-top-color: #5B9FA4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-subtext {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            max-width: 300px;
+            line-height: 1.6;
+        }
+
+        /* PDF Viewer */
+        #pdfContainer {
+            display: none;
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: white;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0;
+            position: relative;
+            z-index: 1;
+            height: 93%;
+            max-height: calc(100vh - 200px);
+        }
+        
+        #pdfContainer.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Diet Plan HTML Styles */
+        .diet-plan-container {
+            width: 100%;
+            background: #f5f5f5;
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .diet-plan-page {
+            width: 205mm;
+            height: 290mm;
+            margin: 0 auto;
+            background: white;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            page-break-after: always;
+        }
+
+        .diet-plan-page:last-child {
+            margin-bottom: 0;
+        }
+
+        .page-background {
+            position: absolute;
+            top: 25%;
+            left: -5.5px;
+            width: 104%;
+            height: 75%;
+            background-image: url('./assets/background.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .page-content {
+            position: relative;
+            z-index: 1;
+            padding: 15mm;
+            height: calc(100% - 8mm);
+            box-sizing: border-box;
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5mm;
+        }
+
+        .header-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .header-right {
+            margin-left: auto;
+            padding-left: 10mm;
+        }
+
+        .header-right img {
+            width: 35mm;
+            height: 17.5mm;
+            object-fit: contain;
+        }
+
+        .logo-img {
+            width: 35mm !important;
+            height: 17.5mm !important;
+            object-fit: contain !important;
+            max-width: 35mm !important;
+            max-height: 17.5mm !important;
+        }
+
+        .title-section {
+            font-size: 33pt;
+            font-weight: 800;
+            margin-bottom: -6mm;
+            line-height: 1;
+            display: block;
+            text-align: left;
+        }
+
+        .title-diet {
+            color: #5A848D;
+        }
+
+        .title-plan {
+            color: #182843;
+        }
+
+        .title-underline {
+            width: 12.01cm;
+            height: 0.31cm;
+            background-color: #5A848D;
+            margin-bottom: -1mm;
+            display: block;
+            clear: both;
+            border-radius: 3.25px;
+        }
+
+        .info-section {
+            font-size: 10.5pt;
+            margin-bottom: 12mm;
+            display: block;
+            clear: both;
+        }
+
+        .info-row {
+            margin-bottom: 1mm;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .info-label {
+            font-weight: 800;
+            display: inline-block;
+            width: 60px;
+        }
+
+        .info-label::after {
+            content: '';
+        }
+
+        .info-value {
+            font-weight: 500;
+            margin-left: 0;
+        }
+
+        .info-value.name {
+            text-transform: uppercase;
+        }
+
+        .diet-type-section {
+            font-size: 14pt;
+            font-weight: 500;
+            margin-bottom: 5mm;
+        }
+
+        .diet-type-wrapper {
+            margin-bottom: 6mm;
+        }
+
+        .diet-type-label {
+            font-weight: 800;
+        }
+
+        .diet-type-value {
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-left: 0.5em;
+        }
+
+        .diet-plan-section {
+            margin-bottom: 10mm;
+        }
+
+        .meal-heading {
+            font-size: 14pt;
+            font-weight: 800;
+            color: #182843;
+            margin-bottom: 0.3mm;
+        }
+
+        .meal-underline {
+            width: 10.44cm;
+            height: 0.31cm;
+            background-color: #5A848D;
+            margin-bottom: 5mm;
+            border-radius: 3.25px;
+        }
+
+        .meal-columns {
+            display: flex;
+            justify-content: space-between;
+            gap: 6mm;
+            padding-left: 2mm;
+        }
+
+        .meal-column {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .food-item {
+            margin-bottom: 1mm;
+        }
+
+        .food-name {
+            font-size: 12pt;
+            color: #000;
+            margin-bottom: 0.3mm;
+        }
+
+        .food-calories {
+            font-size: 12pt;
+            color: #666;
+            margin-bottom: 0.3mm;
+        }
+
+        .food-or {
+            font-size: 12pt;
+            font-style: italic;
+            font-weight: 700;
+            color: #000;
+            text-align: left;
+            margin: 0.5mm 0;
+        }
+
+        .recommendations-section {
+            margin-top: 10mm;
+        }
+
+        .recommendations-heading {
+            font-size: 14pt;
+            font-weight: 800;
+            color: #182843;
+            margin-bottom: 1mm;
+        }
+
+        .recommendations-underline {
+            width: 10.44cm;
+            height: 0.31cm;
+            background-color: #5A848D;
+            margin-bottom: 10mm;
+            border-radius: 3.25px;
+        }
+
+        .recommendations-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-top: 8mm;
+        }
+
+        .recommendation-item {
+            font-size: 11pt;
+            color: #000;
+            margin-bottom: 5.5mm;
+            padding-left: 0;
+            position: relative;
+            font-weight: 400;
+        }
+
+        .rec-dash {
+            color: #5A848D;
+            font-weight: 500;
+            margin-right: 0.1em;
+        }
+
+        .rec-title {
+            font-weight: 500;
+        }
+
+        .page-footer {
+            position: absolute;
+            bottom: 2mm;
+            right: 2mm;
+            font-size: 6pt;
+            font-weight: 400;
+            color: #4E4E4E;
+            z-index: 10;
+        }
+
+        @media print {
+            .diet-plan-container {
+                padding: 0;
+                background: white;
+            }
+
+            .diet-plan-page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+
+            .diet-plan-page:last-child {
+                page-break-after: auto;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .diet-plan-page {
+                width: 100%;
+                height: auto;
+                min-height: 297mm;
+            }
+
+            .diet-plan-container {
+                padding: 10px;
+            }
+        }
+
+        /* Button */
+        .btn-primary {
+            width: 100%;
+            padding: 0.875rem 2rem;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(91, 159, 164, 0.3);
+            margin-top: 0.75rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(91, 159, 164, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 0.75rem 2rem;
+            background: white;
+            color: #5B9FA4;
+            border: 2px solid #5B9FA4;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.75rem;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f8f9;
+            transform: translateY(-2px);
+        }
+
+        .button-container {
+            grid-column: 1 / -1;
+            margin-top: 0.5rem;
+        }
+
+        .container.app-mode .button-container {
+            grid-column: 1;
+        }
+
+        /* Step Progress Indicator */
+        .step-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+            padding: 0 10px;
+        }
+
+        .step-progress::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            right: 10px;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 0;
+        }
+
+        .step-progress-line {
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            height: 2px;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            transition: width 0.4s ease;
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            max-width: 160px;
+        }
+
+        .step-circle {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            border-color: #5B9FA4;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .step.completed .step-circle {
+            border-color: #5B9FA4;
+            background: #5B9FA4;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-align: center;
+            transition: color 0.3s ease;
+            line-height: 1.2;
+        }
+
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #1a202c;
+        }
+
+        /* Step Content */
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Navigation Buttons */
+        .step-navigation {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-prev {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: white;
+            color: #5B9FA4;
+            border: 2px solid #5B9FA4;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev:hover {
+            background: #f0f8f9;
+            transform: translateY(-2px);
+        }
+
+        .btn-next {
+            flex: 2;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(91, 159, 164, 0.3);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(91, 159, 164, 0.4);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .container.app-mode .main-content {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+
+            .preview-panel {
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .step-progress {
+                padding: 0 5px;
+            }
+
+            .step-progress::before {
+                left: 5px;
+                right: 5px;
+            }
+
+            .step-progress-line {
+                left: 5px;
+            }
+
+            .step {
+                max-width: 120px;
+            }
+
+            .step-label {
+                font-size: 0.65rem;
+            }
+
+            .step-circle {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .form-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .step {
+                max-width: 100px;
+                gap: 0.2rem;
+            }
+
+            .step-label {
+                font-size: 0.6rem;
+            }
+
+            .step-circle {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Fullscreen Button */
+        .fullscreen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid #5B9FA4;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+
+        .fullscreen-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(91, 159, 164, 0.3);
+        }
+
+        .fullscreen-btn svg {
+            width: 24px;
+            height: 24px;
+            color: #5B9FA4;
+        }
+
+        .fullscreen-btn.hidden {
+            display: none;
+        }
+
+        /* Hide fullscreen button on mobile/tablet */
+        @media (max-width: 1024px) {
+            .fullscreen-btn {
+                display: none !important;
+            }
+        }
+
+        /* Download PDF Button */
+        .download-pdf-btn {
+            display: none;
+            padding: 0.4rem 0.85rem;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(91, 159, 164, 0.3);
+            transition: all 0.3s ease;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+            margin: 0;
+        }
+
+        .download-pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(91, 159, 164, 0.4);
+        }
+
+        .download-pdf-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-pdf-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .download-pdf-btn.visible {
+            display: flex;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- Fullscreen Button -->
+    <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="Enter Fullscreen">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+        </svg>
+    </button>
+
+    <!-- Portrait Mode Lock Overlay -->
+    <div class="portrait-lock">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        </svg>
+        <h2>Please Rotate Your Device</h2>
+        <p>This app works best in landscape mode</p>
+    </div>
+
+    <!-- Selection Page -->
+    <div class="selection-page" id="selectionPage">
+        <!-- Coming Soon Message -->
+        <div id="comingSoonMessage" style="display: none; position: absolute; top: 39%; left: 27.2%; transform: translateX(-50%); z-index: 10001; text-align: center;">
+            <h2 style="font-size: 1.5rem; font-weight: 700; color: #EBBE5C; margin: 0; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);">Coming Soon!</h2>
+        </div>
+        
+        <h1 class="selection-title">Select Your Experience</h1>
+        <div class="selection-options">
+            <div class="selection-card" onclick="selectBodyFIT()">
+                <div class="selection-card-title" style="color: #EBBE5C;">bodyFIT</div>
+                <img src="assets/bodyFIT.png" alt="bodyFIT Logo">
+            </div>
+            <div class="selection-card" onclick="selectNutriFIT()">
+                <div class="selection-card-title" style="color: #DD5546;">nutriFIT</div>
+                <img src="assets/nutriFIT.png" alt="nutriFIT Logo">
+            </div>
+            <div class="selection-card" onclick="selectMuscleFIT()">
+                <div class="selection-card-title" style="color: #58838C;">muscleFIT</div>
+                <img src="assets/muscleFIT.png" alt="muscleFIT Logo">
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo-container">
+                <img src="assets/fit-logo.png" alt="FIT Logo" class="logo">
+                <div class="brand-name" id="headerBrandName">Body Composition Diet Simulator</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <span>Demo</span>
+            <div class="header-divider"></div>
+            <div class="header-back" onclick="goBackToSelection()">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                <span>BACK TO MENU</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        <div class="main-content">
+            <!-- Form Card -->
+            <div class="form-card">
+                <div class="form-header">
+                    <h1 class="form-title">Body Composition Diet Simulator</h1>
+                    <p class="form-subtitle">Based on real body composition logic – just like on our platform.</p>
+                </div>
+
+                <!-- Step Progress Indicator -->
+                <div class="step-progress">
+                    <div class="step-progress-line" id="progressLine" style="width: 0%;"></div>
+                    <div class="step active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Personal Details</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Body Composition</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Medical Info</div>
+                    </div>
+                </div>
+
+                <form id="dietForm">
+                    <!-- Step 1: Personal Details -->
+                    <div class="step-content active" data-step="1">
+                        <div class="form-content">
+                            <div class="form-section">
+                                <!-- First Name & Last Name -->
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="firstName">First Name <span class="required">*</span></label>
+                                        <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name <span class="required">*</span></label>
+                                        <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Date of Birth -->
+                                <div class="form-group">
+                                    <label for="dob">Date of Birth</label>
+                                    <input type="text" id="dob" name="dob" placeholder="DD/MM/YYYY" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" inputmode="numeric" maxlength="10">
+                                </div>
+                                
+                                <!-- Gender -->
+                                <div class="form-group">
+                                    <label>Gender <span class="required">*</span></label>
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" id="male" name="gender" value="male" required>
+                                            <label for="male">Male</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" id="female" name="gender" value="female" required>
+                                            <label for="female">Female</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <!-- Activity Level -->
+                                <div class="form-group">
+                                    <label for="activity">Activity Level <span class="required">*</span></label>
+                                    <select id="activity" name="activity" required>
+                                        <option value="">Select activity level</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- Dietary Type -->
+                                <div class="form-group">
+                                    <label for="dietType">Dietary Type <span class="required">*</span></label>
+                                    <select id="dietType" name="dietType" required>
+                                        <option value="">Select dietary type</option>
+                                    </select>
+                                </div>
+
+                                <!-- Diet Plan Style -->
+                                <div class="form-group">
+                                    <label>Diet Plan Style <span class="required">*</span></label>
+                                    <div class="radio-group">
+                                        <div class="radio-option">
+                                            <input type="radio" id="normal" name="dietPlan" value="normal" required>
+                                            <label for="normal">Regular</label>
+                                        </div>
+                                        <div class="radio-option">
+                                            <input type="radio" id="if" name="dietPlan" value="if" required>
+                                            <label for="if">Intermittent Fasting</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Goal - Spans full width -->
+                        <div class="form-group", style="margin-top: 0.4rem;">
+                            <label>Goal <span class="required">*</span></label>
+                            <div class="radio-group" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                <div class="radio-option">
+                                    <input type="radio" id="maintain" name="goal" value="maintain" required>
+                                    <label for="maintain">Maintenance</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="lose" name="goal" value="lose" required>
+                                    <label for="lose">Weight Loss</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="gain" name="goal" value="gain" required>
+                                    <label for="gain">Weight Gain</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-navigation">
+                            <button type="button" class="btn-next" onclick="nextStep(2)">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Body Composition -->
+                    <div class="step-content" data-step="2">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <!-- Height -->
+                            <div class="form-group">
+                                <label for="height">Height (cm)</label>
+                                <input type="number" id="height" name="height" placeholder="170" min="50" max="300" step="0.1">
+                            </div>
+                            
+                            <!-- Weight -->
+                            <div class="form-group">
+                                <label for="weight">Weight (kg)</label>
+                                <input type="number" id="weight" name="weight" placeholder="70" min="30" max="300" step="0.1">
+                            </div>
+                            
+                            <!-- Muscle Mass -->
+                            <div class="form-group">
+                                <label for="muscle">Muscle Mass (kg)</label>
+                                <input type="number" id="muscle" name="muscle" placeholder="30" min="0" max="200" step="0.1">
+                            </div>
+                            
+                            <!-- Fat Mass -->
+                            <div class="form-group">
+                                <label for="fat">Fat Mass (kg)</label>
+                                <input type="number" id="fat" name="fat" placeholder="15" min="0" max="200" step="0.1">
+                            </div>
+                            
+                            <!-- LBM -->
+                            <div class="form-group">
+                                <label for="lbm">LBM (kg)</label>
+                                <input type="number" id="lbm" name="lbm" placeholder="55" min="0" max="300" step="0.1">
+                            </div>
+                            
+                            <!-- BMR -->
+                            <div class="form-group">
+                                <label for="bmr">BMR (kcal)</label>
+                                <input type="number" id="bmr" name="bmr" placeholder="1500" min="0" max="10000" step="0.1">
+                            </div>
+                        </div>
+                        
+                        <!-- Calories - Full width -->
+                        <div class="form-group" style="max-width: 500px; margin: 0 auto;">
+                            <label for="calories">Daily Calories (kcal) <span class="required">*</span></label>
+                            <input type="number" id="calories" name="calories" placeholder="Enter or auto-calculate from BMR" min="500" max="10000" step="0.1" required>
+                            <small style="display: block; margin-top: 0.3rem; color: #64748b; font-size: 0.8rem;">Enter manually or auto-calculated from BMR and activity level</small>
+                        </div>
+                        
+                        <div class="step-navigation">
+                            <button type="button" class="btn-prev" onclick="prevStep(1)">← Previous</button>
+                            <button type="button" class="btn-next" onclick="nextStep(3)">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Medical Information -->
+                    <div class="step-content" data-step="3">
+                        <!-- Medical Information -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                            <!-- Medical Conditions -->
+                            <div class="form-group">
+                                <label for="medicalConditions">Medical Conditions</label>
+                                <div id="medicalConditionsCheckboxes" style="max-height: 300px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem; background: #f8fafc;">
+                                    <!-- Checkboxes will be populated here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Allergies -->
+                            <div class="form-group">
+                                <label for="allergies">Allergies</label>
+                                <div id="allergiesCheckboxes" style="max-height: 300px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem; background: #f8fafc;">
+                                    <!-- Checkboxes will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-navigation">
+                            <button type="button" class="btn-prev" onclick="prevStep(2)">← Previous</button>
+                            <button type="submit" class="btn-primary" id="generateBtn" style="flex: 2; margin: 0;">Generate Plan</button>
+                        </div>
+                    </div>
+
+                </form>
+
+                <!-- Final Summary Panel (shown when generating) -->
+                <div class="final-summary-panel" id="finalSummary">
+                    <div class="summary-title">Your Diet Plan Profile</div>
+                    
+                    <div class="summary-section">
+                        <div class="summary-section-title">Personal Details</div>
+                        <div class="summary-item">
+                            <span class="summary-label">Name</span>
+                            <span class="summary-value" id="finalSummaryName">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Date of Birth</span>
+                            <span class="summary-value" id="finalSummaryDob">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Gender</span>
+                            <span class="summary-value" id="finalSummaryGender">-</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="summary-section-title">Goals & Preferences</div>
+                        <div class="summary-item">
+                            <span class="summary-label">Goal</span>
+                            <span class="summary-value" id="finalSummaryGoal">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Dietary Type</span>
+                            <span class="summary-value" id="finalSummaryDiet">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Plan Style</span>
+                            <span class="summary-value" id="finalSummaryPlanStyle">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Activity Level</span>
+                            <span class="summary-value" id="finalSummaryActivity">-</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <div class="summary-section-title">Body Composition</div>
+                        <div class="summary-item" id="summaryItemHeight" style="display: none;">
+                            <span class="summary-label">Height</span>
+                            <span class="summary-value" id="finalSummaryHeight">-</span>
+                        </div>
+                        <div class="summary-item" id="summaryItemWeight" style="display: none;">
+                            <span class="summary-label">Weight</span>
+                            <span class="summary-value" id="finalSummaryWeight">-</span>
+                        </div>
+                        <div class="summary-item" id="summaryItemMuscle" style="display: none;">
+                            <span class="summary-label">Muscle Mass</span>
+                            <span class="summary-value" id="finalSummaryMuscle">-</span>
+                        </div>
+                        <div class="summary-item" id="summaryItemFat" style="display: none;">
+                            <span class="summary-label">Fat Mass</span>
+                            <span class="summary-value" id="finalSummaryFat">-</span>
+                        </div>
+                        <div class="summary-item" id="summaryItemLBM" style="display: none;">
+                            <span class="summary-label">LBM</span>
+                            <span class="summary-value" id="finalSummaryLBM">-</span>
+                        </div>
+                        <div class="summary-item" id="summaryItemBMR" style="display: none;">
+                            <span class="summary-label">BMR</span>
+                            <span class="summary-value" id="finalSummaryBMR">-</span>
+                        </div>
+                        <div class="summary-item" id="summaryItemCalories">
+                            <span class="summary-label">Daily Calories</span>
+                            <span class="summary-value" id="finalSummaryCalories">-</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-section" id="medicalSection" style="display: none;">
+                        <div class="summary-section-title">Medical Conditions</div>
+                        <div class="summary-item">
+                            <span class="summary-value summary-list" id="finalSummaryMedical" style="text-align: left; width: 100%;"></span>
+                        </div>
+                    </div>
+
+                    <div class="summary-section" id="allergiesSection" style="display: none;">
+                        <div class="summary-section-title">Allergies</div>
+                        <div class="summary-item">
+                            <span class="summary-value summary-list" id="finalSummaryAllergies" style="text-align: left; width: 100%;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset button below summary -->
+                <div class="button-container" style="display: none;">
+                    <button type="button" class="btn-primary" id="regenerateBtn" style="margin-top: 0;">Regenerate Plan</button>
+                    <button type="button" class="btn-secondary" id="resetBtn">Start New Profile</button>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel" id="previewPanel">
+                <div class="preview-header">
+                    <h2 class="preview-title">Diet Plan Preview</h2>
+                    <div class="preview-badges">
+                        <span class="status-badge">Personalized</span>
+                        <button class="download-pdf-btn" id="downloadPdfBtn" onclick="downloadDietPlanPDF()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Download PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Generating your diet plan...</div>
+                    <div class="loading-subtext" id="loadingMessage">Sending data to server</div>
+                </div>
+
+                <!-- PDF Container -->
+                <div id="pdfContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VALD Program Container -->
+    <div class="container hidden" id="valdContainer">
+        <div class="main-content">
+            <!-- Form Card -->
+            <div class="form-card">
+                <div class="form-header">
+                    <h1 class="form-title">VALD Training Program</h1>
+                    <p class="form-subtitle">Select your program type and generate a personalized training plan.</p>
+                </div>
+
+                <form id="valdForm">
+                    <div class="form-content" style="grid-template-columns: 1fr; gap: 0;">
+                        <div class="form-section">
+                            <!-- Program Type Selection -->
+                            <div class="form-group">
+                                <label class="group-label">Program Type</label>
+                                <div class="radio-group" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                    <div class="radio-option">
+                                        <input type="radio" id="fullBody" name="programType" value="full-body">
+                                        <label for="fullBody">Full Body</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="upperBody" name="programType" value="upper-body">
+                                        <label for="upperBody">Upper Body</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="lowerBody" name="programType" value="lower-body">
+                                        <label for="lowerBody">Lower Body</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" class="btn-primary" id="generateProgramBtn">Generate Program</button>
+                    </div>
+                </form>
+
+                <!-- Summary Panel for VALD -->
+                <div class="final-summary-panel" id="valdSummary" style="display: none;">
+                    <div class="summary-title">Your Training Program</div>
+                    
+                    <div class="summary-section">
+                        <div class="summary-item">
+                            <span class="summary-label">Program Type</span>
+                            <span class="summary-value" id="valdSummaryType">-</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-section" style="margin-top: 1.5rem;">
+                        <div class="summary-section-title">Choose a Different Type</div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <div class="radio-group" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <div class="radio-option" style="min-width: 100%;">
+                                    <input type="radio" id="fullBodyChange" name="programTypeChange" value="full-body">
+                                    <label for="fullBodyChange">Full Body</label>
+                                </div>
+                                <div class="radio-option" style="min-width: 100%;">
+                                    <input type="radio" id="upperBodyChange" name="programTypeChange" value="upper-body">
+                                    <label for="upperBodyChange">Upper Body</label>
+                                </div>
+                                <div class="radio-option" style="min-width: 100%;">
+                                    <input type="radio" id="lowerBodyChange" name="programTypeChange" value="lower-body">
+                                    <label for="lowerBodyChange">Lower Body</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-primary" id="regenerateProgramBtnInline" style="margin-top: 1rem;">Regenerate Program</button>
+                    </div>
+                </div>
+
+                <!-- Buttons for generated state -->
+                <div class="button-container" id="valdButtonContainer" style="display: none;">
+                </div>
+            </div>
+
+            <!-- Preview Panel for VALD -->
+            <div class="preview-panel" id="valdPreviewPanel">
+                <div class="preview-header">
+                    <h2 class="preview-title">Training Program</h2>
+                    <div class="preview-badges">
+                        <span class="status-badge">VALD Dynamo</span>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-state" id="valdLoadingState">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Generating your training program...</div>
+                    <div class="loading-subtext">Preparing your workout plan</div>
+                </div>
+
+                <!-- Program Image Container -->
+                <div id="programImageContainer" style="display: none; width: 100%; height: 93%; max-height: calc(100vh - 200px); position: relative; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); background: white; overflow: hidden;">
+                    <div id="programImageWrapper" style="width: 100%; height: 100%; overflow: auto; cursor: grab; position: relative;">
+                        <img id="programImage" style="display: block; width: 100%; height: auto; transform-origin: top left;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- bodyFIT Container -->
+    <div class="container app-mode hidden" id="bodyFitContainer">
+        <div class="main-content">
+            <!-- Form Card -->
+            <div class="form-card" style="display: none;">
+                <div class="form-header">
+                    <h1 class="form-title">Posture Correction Form</h1>
+                    <p class="form-subtitle">Based on posture screening using Bodydot technology.</p>
+                </div>
+            </div>
+
+            <!-- Preview Panel for bodyFIT -->
+            <div class="preview-panel" id="bodyFitPreviewPanel" style="grid-column: 1 / -1;">
+                <div class="preview-header" style="margin-bottom: 0.6rem; padding-bottom: 0.3rem;">
+                    <h2 class="preview-title" style="margin-top: -0.7rem;">Posture Analysis</h2>
+                    <div class="preview-badges" style="margin-top: -0.7rem;">
+                        <span class="status-badge">Bodydot</span>
+                    </div>
+                </div>
+
+                <!-- Form Image Container -->
+                <div id="bodyFitFormContainer" style="display: block; width: 100%; height: 100%; max-height: calc(100vh - 190px); position: relative; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); background: white; overflow: hidden;">
+                    <div id="bodyFitFormWrapper" style="width: 100%; height: 100%; overflow: auto; cursor: grab; position: relative;">
+                        <img id="bodyFitFormImage" src="assets/bodyFIT-form.png" style="display: block; width: 100%; height: auto; transform-origin: top left; margin: 0 auto;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // Fullscreen functionality
+        function toggleFullscreen() {
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                document.documentElement.requestFullscreen().then(() => {
+                    fullscreenBtn.classList.add('hidden');
+                }).catch(err => {
+                    console.error('Error attempting to enable fullscreen:', err);
+                });
+            }
+        }
+
+        // Listen for fullscreen changes (to show button when exiting via ESC)
+        document.addEventListener('fullscreenchange', () => {
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            if (!document.fullscreenElement) {
+                fullscreenBtn.classList.remove('hidden');
+            }
+        });
+
+        // Page Navigation
+        function selectBodyFIT() {
+            const selectionPage = document.getElementById('selectionPage');
+            const header = document.querySelector('.header');
+            const bodyFitContainer = document.getElementById('bodyFitContainer');
+            const headerBrandName = document.getElementById('headerBrandName');
+            
+            // Update header text
+            headerBrandName.textContent = 'Posture Correction Program';
+            
+            // Fade out selection page
+            selectionPage.classList.add('fade-out');
+            
+            setTimeout(() => {
+                selectionPage.classList.add('hidden');
+                selectionPage.classList.remove('fade-out');
+                
+                // Show and fade in header and bodyFIT container
+                header.classList.add('visible');
+                bodyFitContainer.classList.remove('hidden');
+                bodyFitContainer.style.display = 'flex';
+                bodyFitContainer.classList.add('fade-in');
+                
+                // Disable page scrolling
+                document.body.style.overflow = 'hidden';
+                
+                setTimeout(() => {
+                    bodyFitContainer.classList.remove('fade-in');
+                }, 400);
+            }, 400);
+        }
+
+        function selectNutriFIT() {
+            const selectionPage = document.getElementById('selectionPage');
+            const header = document.querySelector('.header');
+            const mainContainer = document.getElementById('mainContainer');
+            const headerBrandName = document.getElementById('headerBrandName');
+            
+            // Update header text
+            headerBrandName.textContent = 'Body Composition Diet Simulator';
+            
+            // Fade out selection page
+            selectionPage.classList.add('fade-out');
+            
+            setTimeout(() => {
+                selectionPage.classList.add('hidden');
+                selectionPage.classList.remove('fade-out');
+                
+                // Show and fade in header and main container
+                header.classList.add('visible');
+                mainContainer.style.display = 'flex';
+                mainContainer.classList.add('fade-in');
+                
+                setTimeout(() => {
+                    mainContainer.classList.remove('fade-in');
+                }, 400);
+            }, 400);
+        }
+
+        function selectMuscleFIT() {
+            const selectionPage = document.getElementById('selectionPage');
+            const header = document.querySelector('.header');
+            const valdContainer = document.getElementById('valdContainer');
+            const headerBrandName = document.getElementById('headerBrandName');
+            
+            // Update header text
+            headerBrandName.textContent = 'Training Program Generator';
+            
+            // Fade out selection page
+            selectionPage.classList.add('fade-out');
+            
+            setTimeout(() => {
+                selectionPage.classList.add('hidden');
+                selectionPage.classList.remove('fade-out');
+                
+                // Show and fade in header and VALD container
+                header.classList.add('visible');
+                valdContainer.classList.remove('hidden');
+                valdContainer.style.display = 'flex';
+                valdContainer.classList.add('fade-in');
+                
+                setTimeout(() => {
+                    valdContainer.classList.remove('fade-in');
+                }, 400);
+            }, 400);
+        }
+
+        function goBackToSelection() {
+            const header = document.querySelector('.header');
+            const mainContainer = document.getElementById('mainContainer');
+            const valdContainer = document.getElementById('valdContainer');
+            const bodyFitContainer = document.getElementById('bodyFitContainer');
+            const selectionPage = document.getElementById('selectionPage');
+            
+            // Fade out active container
+            let activeContainer = mainContainer;
+            if (valdContainer.style.display !== 'none' && !valdContainer.classList.contains('hidden')) {
+                activeContainer = valdContainer;
+            } else if (bodyFitContainer.style.display !== 'none' && !bodyFitContainer.classList.contains('hidden')) {
+                activeContainer = bodyFitContainer;
+            }
+            activeContainer.classList.add('fade-out');
+            
+            setTimeout(() => {
+                header.classList.remove('visible');
+                mainContainer.style.display = 'none';
+                valdContainer.style.display = 'none';
+                valdContainer.classList.add('hidden');
+                bodyFitContainer.style.display = 'none';
+                bodyFitContainer.classList.add('hidden');
+                activeContainer.classList.remove('fade-out');
+                
+                // Re-enable page scrolling
+                document.body.style.overflow = '';
+                
+                // Show and fade in selection page
+                selectionPage.classList.remove('hidden');
+                selectionPage.classList.add('fade-in');
+                
+                setTimeout(() => {
+                    selectionPage.classList.remove('fade-in');
+                }, 400);
+                
+                // Reset the form and state
+                resetToInitialState();
+                resetValdState();
+            }, 400);
+        }
+
+        function resetToInitialState() {
+            const formCard = document.querySelector('.form-card');
+            const previewPanel = document.querySelector('.preview-panel');
+            
+            mainContainer.classList.remove('app-mode');
+            formCard.classList.remove('summary-mode');
+            document.body.classList.remove('summary-active');
+            document.querySelector('.button-container').style.display = 'none';
+            resetBtn.style.display = 'none';
+            regenerateBtn.style.display = 'none';
+            loadingState.style.display = 'flex';
+            pdfContainer.classList.remove('active');
+            pdfContainer.innerHTML = '';
+            form.reset();
+            clearInterval(messageInterval);
+            messageIndex = 0;
+            currentStep = 1;
+            updateStepDisplay();
+            isRegenerating = false;
+            
+            // Clear all red validation styling
+            form.querySelectorAll('.form-group > label').forEach(label => {
+                label.style.color = '';
+            });
+            
+            // Re-populate dropdowns and checkboxes to reset them properly
+            populateDropdowns();
+        }
+
+        // API Configuration
+        const API_CONFIG = {
+            baseUrl: 'http://185.143.103.106:8080/rest/s1/fit/dietPlan',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + btoa('fit:Fit@2024')
+            }
+        };
+
+        // Store API data
+        let apiData = {
+            dietaryTypes: [],
+            activities: [],
+            conditions: [],
+            allergies: [],
+            planTypes: [],
+            planSecondaryTypes: []
+        };
+
+        // Fetch all dropdown data from API
+        async function fetchAPIData() {
+            try {
+                console.log('Starting API fetch...');
+                console.log('API Base URL:', API_CONFIG.baseUrl);
+                
+                // Fetch all data in parallel with better error handling
+                const fetchOptions = {
+                    method: 'GET',
+                    headers: API_CONFIG.headers,
+                    mode: 'cors'
+                };
+                
+                const [dietaryTypes, activities, conditions, allergies, planTypes, planSecondaryTypes] = await Promise.all([
+                    fetch(`${API_CONFIG.baseUrl}/dietaryType`, fetchOptions).then(r => {
+                        console.log('DietaryType response status:', r.status);
+                        if (!r.ok) throw new Error(`DietaryType failed: ${r.status}`);
+                        return r.json();
+                    }).catch(e => { console.error('DietaryType error:', e); throw e; }),
+                    fetch(`${API_CONFIG.baseUrl}/activity`, fetchOptions).then(r => {
+                        console.log('Activity response status:', r.status);
+                        if (!r.ok) throw new Error(`Activity failed: ${r.status}`);
+                        return r.json();
+                    }).catch(e => { console.error('Activity error:', e); throw e; }),
+                    fetch(`${API_CONFIG.baseUrl}/condition`, fetchOptions).then(r => {
+                        console.log('Condition response status:', r.status);
+                        if (!r.ok) throw new Error(`Condition failed: ${r.status}`);
+                        return r.json();
+                    }).catch(e => { console.error('Condition error:', e); throw e; }),
+                    fetch(`${API_CONFIG.baseUrl}/allergy`, fetchOptions).then(r => {
+                        console.log('Allergy response status:', r.status);
+                        if (!r.ok) throw new Error(`Allergy failed: ${r.status}`);
+                        return r.json();
+                    }).catch(e => { console.error('Allergy error:', e); throw e; }),
+                    fetch(`${API_CONFIG.baseUrl}/planType`, fetchOptions).then(r => {
+                        console.log('PlanType response status:', r.status);
+                        if (!r.ok) throw new Error(`PlanType failed: ${r.status}`);
+                        return r.json();
+                    }).catch(e => { console.error('PlanType error:', e); throw e; }),
+                    fetch(`${API_CONFIG.baseUrl}/planSecondaryType`, fetchOptions).then(r => {
+                        console.log('PlanSecondaryType response status:', r.status);
+                        if (!r.ok) throw new Error(`PlanSecondaryType failed: ${r.status}`);
+                        return r.json();
+                    }).catch(e => { console.error('PlanSecondaryType error:', e); throw e; })
+                ]);
+
+                // Store the data
+                apiData.dietaryTypes = dietaryTypes.dietaryTypeList || [];
+                apiData.activities = activities.activityList || [];
+                apiData.conditions = conditions.conditionList || [];
+                apiData.allergies = allergies.allergyList || [];
+                apiData.planTypes = planTypes.planTypeList || [];
+                apiData.planSecondaryTypes = planSecondaryTypes.planSecondaryTypeList || [];
+
+                console.log('API Data loaded:', apiData);
+                console.log('Activities count:', apiData.activities.length);
+                console.log('DietaryTypes count:', apiData.dietaryTypes.length);
+
+                // Populate dropdowns
+                populateDropdowns();
+            } catch (error) {
+                console.error('Error fetching API data:', error);
+                showNetworkError();
+            }
+        }
+
+        function showNetworkError() {
+            const banner = document.getElementById('networkErrorBanner');
+            if (banner) {
+                banner.style.display = 'block';
+                // Auto-hide after 8 seconds
+                setTimeout(() => {
+                    dismissNetworkError();
+                }, 8000);
+            }
+        }
+
+        function dismissNetworkError() {
+            const banner = document.getElementById('networkErrorBanner');
+            if (banner) {
+                banner.style.opacity = '0';
+                banner.style.transition = 'opacity 0.3s ease-out';
+                setTimeout(() => {
+                    banner.style.display = 'none';
+                    banner.style.opacity = '1';
+                    banner.style.transition = '';
+                }, 300);
+            }
+        }
+
+        // Populate all dropdowns with API data
+        function populateDropdowns() {
+            // Populate Activity Level and build multipliers map
+            const activitySelect = document.getElementById('activity');
+            activitySelect.innerHTML = '<option value="">Select activity level</option>';
+            
+            // Map activity levels to their multipliers
+            const multiplierMap = {
+                'extra active': 1.75,
+                'very active': 1.575,
+                'sedentary': 1.05,
+                'light': 1.2,
+                'lightly': 1.2,
+                'moderate': 1.3,
+                'active': 1.75,
+            };
+            
+            let extraActiveId = null;
+            
+            apiData.activities.forEach(activity => {
+                const option = document.createElement('option');
+                option.value = activity.enumId;
+                option.textContent = activity.description;
+                activitySelect.appendChild(option);
+                
+                // Map the activity ID to a multiplier based on description
+                const desc = activity.description.toLowerCase();
+                for (let key in multiplierMap) {
+                    if (desc.includes(key)) {
+                        activityMultipliers[activity.enumId] = multiplierMap[key];
+                        break;
+                    }
+                }
+                
+                // Find "extra active" option
+                if (desc.includes('extra active') || desc.includes('very active')) {
+                    extraActiveId = activity.enumId;
+                }
+            });
+            
+            console.log('Activity multipliers:', activityMultipliers);
+
+            // Populate Dietary Type
+            const dietTypeSelect = document.getElementById('dietType');
+            dietTypeSelect.innerHTML = '<option value="">Select dietary type</option>';
+            let omnivoreId = null;
+            apiData.dietaryTypes.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type.dietaryTypeId;
+                option.textContent = type.dietaryTypeName;
+                dietTypeSelect.appendChild(option);
+                
+                // Find omnivore option
+                if (type.dietaryTypeName.toLowerCase().includes('omnivore')) {
+                    omnivoreId = type.dietaryTypeId;
+                }
+            });
+
+            // Populate Medical Conditions
+            const conditionsContainer = document.getElementById('medicalConditionsCheckboxes');
+            conditionsContainer.innerHTML = '';
+            
+            // Add "No medical conditions" checkbox at the top
+            const noConditionsLabel = document.createElement('label');
+            noConditionsLabel.style.cssText = 'display: flex; align-items: center; padding: 0.5rem; cursor: pointer; border-radius: 4px; transition: background 0.2s; font-weight: 500; background: #f1f5f9; margin-bottom: 0.5rem;';
+            noConditionsLabel.onmouseover = () => noConditionsLabel.style.background = '#e2e8f0';
+            noConditionsLabel.onmouseout = () => noConditionsLabel.style.background = '#f1f5f9';
+            
+            const noConditionsCheckbox = document.createElement('input');
+            noConditionsCheckbox.type = 'checkbox';
+            noConditionsCheckbox.name = 'medicalConditions';
+            noConditionsCheckbox.id = 'noMedicalConditions';
+            noConditionsCheckbox.value = 'none';
+            noConditionsCheckbox.checked = false; // Explicitly start unchecked
+            noConditionsCheckbox.style.cssText = 'margin-right: 0.5rem; width: 16px; height: 16px; cursor: pointer;';
+            
+            const noConditionsText = document.createElement('span');
+            noConditionsText.textContent = 'No Medical Conditions';
+            noConditionsText.style.cssText = 'font-size: 0.9rem; color: #1a202c;';
+            
+            noConditionsLabel.appendChild(noConditionsCheckbox);
+            noConditionsLabel.appendChild(noConditionsText);
+            conditionsContainer.appendChild(noConditionsLabel);
+            
+            // Handle "No medical conditions" checkbox behavior
+            noConditionsCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    const otherCheckboxes = conditionsContainer.querySelectorAll('input[name="medicalConditions"]:not(#noMedicalConditions)');
+                    otherCheckboxes.forEach(cb => {
+                        cb.checked = false;
+                    });
+                }
+            });
+            
+            // Conditions to filter out (add condition names here)
+            const excludedConditions = ['Cardiovascular Diseases', 'Diabetes', 'Nut allergy', 'Thyroid Dysfunction', 'GERD (Acid Reflux)', 'hyperkaliemia', 'Oral Allergy Syndrome'];
+            
+            
+            apiData.conditions.filter(condition => !excludedConditions.includes(condition.conditionName)).forEach(condition => {
+                const label = document.createElement('label');
+                label.style.cssText = 'display: flex; align-items: center; padding: 0.5rem; cursor: pointer; border-radius: 4px; transition: background 0.2s;';
+                label.onmouseover = () => label.style.background = '#e2e8f0';
+                label.onmouseout = () => label.style.background = 'transparent';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'medicalConditions';
+                checkbox.value = condition.conditionId;
+                checkbox.style.cssText = 'margin-right: 0.5rem; width: 16px; height: 16px; cursor: pointer;';
+                
+                // Uncheck "No medical conditions" when any condition is selected
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        document.getElementById('noMedicalConditions').checked = false;
+                    }
+                });
+                
+                const text = document.createElement('span');
+                text.textContent = condition.conditionName;
+                text.style.cssText = 'font-size: 0.9rem; color: #1a202c;';
+                
+                label.appendChild(checkbox);
+                label.appendChild(text);
+                conditionsContainer.appendChild(label);
+            });
+
+            // Populate Allergies
+            const allergiesContainer = document.getElementById('allergiesCheckboxes');
+            allergiesContainer.innerHTML = '';
+            
+            // Add "No allergies" checkbox at the top
+            const noAllergiesLabel = document.createElement('label');
+            noAllergiesLabel.style.cssText = 'display: flex; align-items: center; padding: 0.5rem; cursor: pointer; border-radius: 4px; transition: background 0.2s; font-weight: 500; background: #f1f5f9; margin-bottom: 0.5rem;';
+            noAllergiesLabel.onmouseover = () => noAllergiesLabel.style.background = '#e2e8f0';
+            noAllergiesLabel.onmouseout = () => noAllergiesLabel.style.background = '#f1f5f9';
+            
+            const noAllergiesCheckbox = document.createElement('input');
+            noAllergiesCheckbox.type = 'checkbox';
+            noAllergiesCheckbox.name = 'allergies';
+            noAllergiesCheckbox.id = 'noAllergies';
+            noAllergiesCheckbox.value = 'none';
+            noAllergiesCheckbox.checked = false; // Explicitly start unchecked
+            noAllergiesCheckbox.style.cssText = 'margin-right: 0.5rem; width: 16px; height: 16px; cursor: pointer;';
+            
+            const noAllergiesText = document.createElement('span');
+            noAllergiesText.textContent = 'No Allergies';
+            noAllergiesText.style.cssText = 'font-size: 0.9rem; color: #1a202c;';
+            
+            noAllergiesLabel.appendChild(noAllergiesCheckbox);
+            noAllergiesLabel.appendChild(noAllergiesText);
+            allergiesContainer.appendChild(noAllergiesLabel);
+            
+            // Handle "No allergies" checkbox behavior
+            noAllergiesCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    const otherCheckboxes = allergiesContainer.querySelectorAll('input[name="allergies"]:not(#noAllergies)');
+                    otherCheckboxes.forEach(cb => {
+                        cb.checked = false;
+                    });
+                }
+            });
+            
+            // Allergies to filter out (add allergy names here)
+            const excludedAllergies = ['Phenylketonuria', 'Celiac Disease', 'Celiac Disease / Gluten Sensitivity','Latex-Fruit Syndrome'];
+            
+            apiData.allergies.filter(allergy => !excludedAllergies.includes(allergy.allergyName)).forEach(allergy => {
+                const label = document.createElement('label');
+                label.style.cssText = 'display: flex; align-items: center; padding: 0.5rem; cursor: pointer; border-radius: 4px; transition: background 0.2s;';
+                label.onmouseover = () => label.style.background = '#e2e8f0';
+                label.onmouseout = () => label.style.background = 'transparent';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'allergies';
+                checkbox.value = allergy.allergyId;
+                checkbox.style.cssText = 'margin-right: 0.5rem; width: 16px; height: 16px; cursor: pointer;';
+                
+                // Uncheck "No allergies" when any allergy is selected
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        document.getElementById('noAllergies').checked = false;
+                    }
+                });
+                
+                const text = document.createElement('span');
+                text.textContent = allergy.allergyName;
+                text.style.cssText = 'font-size: 0.9rem; color: #1a202c;';
+                
+                label.appendChild(checkbox);
+                label.appendChild(text);
+                allergiesContainer.appendChild(label);
+            });
+
+            // Update Goal radio buttons with plan type IDs
+            updateGoalRadios();
+
+            // Update Diet Plan Style radio buttons with secondary type IDs
+            updateDietPlanRadios();
+        }
+
+        // Update Goal radio buttons with actual IDs from API
+        function updateGoalRadios() {
+            // Map common goal names to plan types
+            const goalMapping = {
+                'maintain': ['maintenance', 'maintain'],
+                'lose': ['weight loss', 'lose', 'fat loss'],
+                'gain': ['weight gain', 'gain', 'muscle gain']
+            };
+
+            Object.keys(goalMapping).forEach(radioValue => {
+                const radio = document.getElementById(radioValue);
+                if (radio) {
+                    const matchingType = apiData.planTypes.find(type => 
+                        goalMapping[radioValue].some(keyword => 
+                            type.typeName.toLowerCase().includes(keyword)
+                        )
+                    );
+                    if (matchingType) {
+                        radio.value = matchingType.typeId;
+                        radio.setAttribute('data-text', radioValue); // Store original value for display
+                    }
+                }
+            });
+        }
+
+        // Update Diet Plan Style radio buttons with actual IDs from API
+        function updateDietPlanRadios() {
+            // Map diet plan styles to secondary types
+            const planMapping = {
+                'normal': ['default', 'normal', 'regular', 'standard'],
+                'if': ['intermittent fasting', 'if', 'fasting']
+            };
+
+            console.log('Available planSecondaryTypes:', apiData.planSecondaryTypes);
+
+            Object.keys(planMapping).forEach(radioValue => {
+                const radio = document.getElementById(radioValue);
+                if (radio) {
+                    const matchingType = apiData.planSecondaryTypes.find(type => 
+                        planMapping[radioValue].some(keyword => 
+                            type.typeName.toLowerCase().includes(keyword)
+                        )
+                    );
+                    if (matchingType) {
+                        radio.value = matchingType.secondaryTypeId;
+                        radio.setAttribute('data-text', radioValue); // Store original value for display
+                        console.log(`Mapped ${radioValue} to ID: ${matchingType.secondaryTypeId}`);
+                    } else {
+                        console.warn(`No matching secondaryType found for ${radioValue}`);
+                    }
+                }
+            });
+        }
+
+        // Call API data fetch when page loads
+        window.addEventListener('DOMContentLoaded', fetchAPIData);
+
+        // VALD Program Logic
+        const valdForm = document.getElementById('valdForm');
+        const valdContainer = document.getElementById('valdContainer');
+        const valdPreviewPanel = document.getElementById('valdPreviewPanel');
+        const valdLoadingState = document.getElementById('valdLoadingState');
+        const programImageContainer = document.getElementById('programImageContainer');
+        const programImage = document.getElementById('programImage');
+        const programImageWrapper = document.getElementById('programImageWrapper');
+        const regenerateProgramBtn = document.getElementById('regenerateProgramBtn');
+        const resetValdBtn = document.getElementById('resetValdBtn');
+
+        let currentProgramType = '';
+        let currentZoom = 1;
+        let isPanning = false;
+        let startX, startY, scrollLeft, scrollTop;
+
+        // Validate VALD form (same logic as diet plan validation)
+        function validateValdForm() {
+            // We'll validate inside the VALD form like a "single step"
+            const currentStepContent = valdForm;
+            const requiredInputs = currentStepContent.querySelectorAll('[required]');
+            
+            // Clear all previous error styling
+            currentStepContent.querySelectorAll('.form-group > label').forEach(label => {
+                label.style.color = '';
+            });
+            
+            let hasError = false;
+            
+            for (let input of requiredInputs) {
+                let isValid = false;
+                
+                if (input.type === 'radio') {
+                    const radioGroup = currentStepContent.querySelectorAll(`[name="${input.name}"]`);
+                    isValid = Array.from(radioGroup).some(radio => radio.checked);
+                } else if (input.tagName === 'SELECT') {
+                    isValid = input.value !== '';
+                } else {
+                    isValid = input.value.trim() !== '';
+                }
+                
+                if (!isValid) {
+                    // Find the label for this input
+                    let label = null;
+                    
+                    if (input.type === 'radio') {
+                        const formGroup = input.closest('.form-group');
+                        if (formGroup) {
+                            label = formGroup.querySelector('.group-label');
+                        }
+                    } else if (input.id) {
+                        label = currentStepContent.querySelector(`label[for="${input.id}"]`);
+                    }
+                    
+                    if (!label) {
+                        // Find closest label as a fallback
+                        const formGroup = input.closest('.form-group');
+                        if (formGroup) {
+                            label = formGroup.querySelector('.group-label');
+                        }
+                    }
+                    
+                    if (label) {
+                        label.style.color = '#dc2626'; // 🔴 make it red
+                    }
+                    
+                    if (!hasError) {
+                        input.focus();
+                        hasError = true;
+                    }
+                }
+            }
+            
+            return !hasError;
+        }
+
+        // Generate random program
+        function generateRandomProgram(programType) {
+            const randomNum = Math.floor(Math.random() * 5) + 1;
+            return `assets/programs/${programType}-${randomNum}.png`;
+        }
+
+        // Zoom functionality
+        programImageWrapper.addEventListener('wheel', (e) => {
+            // Only zoom if Ctrl key is pressed (trackpad pinch) or using mouse wheel
+            // Let normal trackpad scroll work without zooming
+            if (!e.ctrlKey) {
+                return; // Allow normal scrolling
+            }
+            
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            const newZoom = Math.min(Math.max(1, currentZoom + delta), 3);
+            
+            if (newZoom !== currentZoom) {
+                // Get mouse position relative to the wrapper
+                const rect = programImageWrapper.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                
+                // Calculate the point in the image under the mouse
+                const imagePointX = (programImageWrapper.scrollLeft + mouseX) / currentZoom;
+                const imagePointY = (programImageWrapper.scrollTop + mouseY) / currentZoom;
+                
+                // Update zoom
+                currentZoom = newZoom;
+                programImage.style.width = (100 * currentZoom) + '%';
+                
+                // Adjust scroll to keep the same point under the mouse
+                requestAnimationFrame(() => {
+                    programImageWrapper.scrollLeft = (imagePointX * currentZoom) - mouseX;
+                    programImageWrapper.scrollTop = (imagePointY * currentZoom) - mouseY;
+                });
+            }
+        });
+
+        programImageWrapper.addEventListener('mousedown', (e) => {
+            isPanning = true;
+            programImageWrapper.style.cursor = 'grabbing';
+            startX = e.pageX - programImageWrapper.offsetLeft;
+            startY = e.pageY - programImageWrapper.offsetTop;
+            scrollLeft = programImageWrapper.scrollLeft;
+            scrollTop = programImageWrapper.scrollTop;
+        });
+
+        programImageWrapper.addEventListener('mouseleave', () => {
+            isPanning = false;
+            programImageWrapper.style.cursor = 'grab';
+        });
+
+        programImageWrapper.addEventListener('mouseup', () => {
+            isPanning = false;
+            programImageWrapper.style.cursor = 'grab';
+        });
+
+        programImageWrapper.addEventListener('mousemove', (e) => {
+            if (!isPanning) return;
+            e.preventDefault();
+            const x = e.pageX - programImageWrapper.offsetLeft;
+            const y = e.pageY - programImageWrapper.offsetTop;
+            const walkX = (x - startX) * 2;
+            const walkY = (y - startY) * 2;
+            programImageWrapper.scrollLeft = scrollLeft - walkX;
+            programImageWrapper.scrollTop = scrollTop - walkY;
+        });
+
+        // Touch support for tablets (not trackpads)
+        let touchStartDistance = 0;
+        let touchCenterX = 0;
+        let touchCenterY = 0;
+        
+        // Detect if device has actual touch screen (not just trackpad)
+        const isTouchScreen = 'ontouchstart' in window && navigator.maxTouchPoints > 1;
+        
+        if (isTouchScreen) {
+            programImageWrapper.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    touchStartDistance = Math.hypot(
+                        e.touches[0].pageX - e.touches[1].pageX,
+                        e.touches[0].pageY - e.touches[1].pageY
+                    );
+                    
+                    // Get the center point of the pinch gesture relative to the wrapper
+                    const rect = programImageWrapper.getBoundingClientRect();
+                    touchCenterX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
+                    touchCenterY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - rect.top;
+                }
+            });
+
+            programImageWrapper.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const touchDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                const delta = (touchDistance - touchStartDistance) * 0.01;
+                const newZoom = Math.min(Math.max(1, currentZoom + delta), 3);
+                
+                if (newZoom !== currentZoom) {
+                    // Store old scroll positions
+                    const oldScrollLeft = programImageWrapper.scrollLeft;
+                    const oldScrollTop = programImageWrapper.scrollTop;
+                    
+                    // Calculate the point in the image that's under the touch center
+                    const imagePointX = (oldScrollLeft + touchCenterX) / currentZoom;
+                    const imagePointY = (oldScrollTop + touchCenterY) / currentZoom;
+                    
+                    // Update zoom
+                    currentZoom = newZoom;
+                    programImage.style.width = (100 * currentZoom) + '%';
+                    
+                    // Calculate new scroll position to keep the same point under the touch
+                    requestAnimationFrame(() => {
+                        programImageWrapper.scrollLeft = (imagePointX * currentZoom) - touchCenterX;
+                        programImageWrapper.scrollTop = (imagePointY * currentZoom) - touchCenterY;
+                    });
+                    
+                    touchStartDistance = touchDistance;
+                }
+            }
+        });
+        }
+
+        // VALD Form Submit
+        valdForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const programTypeInput = document.querySelector('input[name="programType"]:checked');
+            if (!programTypeInput) {
+                // Show error on Program Type label
+                const programTypeLabel = valdForm.querySelector('.form-group label.group-label');
+                if (programTypeLabel) {
+                    programTypeLabel.style.color = '#dc2626';
+                }
+                return;
+            }
+            
+            // Clear any previous errors
+            const programTypeLabel = valdForm.querySelector('.form-group label.group-label');
+            if (programTypeLabel) {
+                programTypeLabel.style.color = '';
+            }
+            
+            const programType = programTypeInput.value;
+            currentProgramType = programType;
+            
+            // Update summary
+            const programTypeText = programType.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+            document.getElementById('valdSummaryType').textContent = programTypeText;
+            
+            // Add transition animation
+            const valdFormCard = document.querySelector('#valdContainer .form-card');
+            const valdPreview = document.getElementById('valdPreviewPanel');
+            valdFormCard.classList.add('transitioning-to-summary');
+            
+            // Switch to app mode and summary mode with delay for animation
+            setTimeout(() => {
+                valdContainer.classList.add('app-mode');
+                valdFormCard.classList.add('summary-mode');
+                document.body.classList.add('summary-active');
+                document.getElementById('valdSummary').style.display = 'block';
+                document.getElementById('valdButtonContainer').style.display = 'block';
+                
+                // Trigger preview panel reveal
+                valdPreview.classList.add('revealing');
+                
+                // Clean up animation classes
+                setTimeout(() => {
+                    valdFormCard.classList.remove('transitioning-to-summary');
+                    valdPreview.classList.remove('revealing');
+                }, 600);
+            }, 100);
+            
+            // Ensure change radio buttons are unchecked
+            document.querySelectorAll('input[name="programTypeChange"]').forEach(radio => {
+                radio.checked = false;
+                // Grey out the currently selected program type
+                if (radio.value === currentProgramType) {
+                    radio.disabled = true;
+                    radio.nextElementSibling.style.opacity = '0.5';
+                    radio.nextElementSibling.style.cursor = 'not-allowed';
+                } else {
+                    radio.disabled = false;
+                    radio.nextElementSibling.style.opacity = '';
+                    radio.nextElementSibling.style.cursor = '';
+                }
+            });
+            
+            // Show loading
+            valdLoadingState.style.display = 'flex';
+            programImageContainer.style.display = 'none';
+            
+            // Simulate loading delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Load program image
+            const imagePath = generateRandomProgram(programType);
+            programImage.src = imagePath;
+            programImage.onload = () => {
+                valdLoadingState.style.display = 'none';
+                programImageContainer.style.display = 'block';
+                currentZoom = 1;
+                programImage.style.width = '100%';
+                programImageWrapper.scrollTop = 0;
+                programImageWrapper.scrollLeft = 0;
+            };
+        });
+
+        // Regenerate Program (from inline button in summary)
+        document.getElementById('regenerateProgramBtnInline').addEventListener('click', async function() {
+            // Check if user selected a different type
+            const newProgramTypeInput = document.querySelector('input[name="programTypeChange"]:checked');
+            if (newProgramTypeInput) {
+                currentProgramType = newProgramTypeInput.value;
+                
+                // Update summary
+                const programTypeText = currentProgramType.split('-').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ');
+                document.getElementById('valdSummaryType').textContent = programTypeText;
+                
+                // Clear the radio selection and update disabled states
+                document.querySelectorAll('input[name="programTypeChange"]').forEach(radio => {
+                    radio.checked = false;
+                    // Grey out the newly selected program type
+                    if (radio.value === currentProgramType) {
+                        radio.disabled = true;
+                        radio.nextElementSibling.style.opacity = '0.5';
+                        radio.nextElementSibling.style.cursor = 'not-allowed';
+                    } else {
+                        radio.disabled = false;
+                        radio.nextElementSibling.style.opacity = '';
+                        radio.nextElementSibling.style.cursor = '';
+                    }
+                });
+            }
+            
+            programImageContainer.style.display = 'none';
+            valdLoadingState.style.display = 'flex';
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            const imagePath = generateRandomProgram(currentProgramType);
+            programImage.src = imagePath;
+            programImage.onload = () => {
+                valdLoadingState.style.display = 'none';
+                programImageContainer.style.display = 'block';
+                currentZoom = 1;
+                programImage.style.width = '100%';
+                programImageWrapper.scrollTop = 0;
+                programImageWrapper.scrollLeft = 0;
+            };
+        });
+
+        function resetValdState() {
+            valdContainer.classList.remove('app-mode');
+            document.querySelector('#valdContainer .form-card').classList.remove('summary-mode');
+            document.body.classList.remove('summary-active');
+            document.getElementById('valdSummary').style.display = 'none';
+            document.getElementById('valdButtonContainer').style.display = 'none';
+            valdForm.reset();
+            valdLoadingState.style.display = 'flex';
+            programImageContainer.style.display = 'none';
+            currentProgramType = '';
+            currentZoom = 1;
+            
+            // Clear all red validation styling
+            valdForm.querySelectorAll('.form-group > label').forEach(label => {
+                label.style.color = '';
+            });
+        }
+
+        // bodyFIT Form Logic
+        const bodyFitFormContainer = document.getElementById('bodyFitFormContainer');
+        const bodyFitFormImage = document.getElementById('bodyFitFormImage');
+        const bodyFitFormWrapper = document.getElementById('bodyFitFormWrapper');
+
+        let currentBodyFitZoom = 1;
+        let isBodyFitPanning = false;
+        let bodyFitStartX, bodyFitStartY, bodyFitScrollLeft, bodyFitScrollTop;
+
+        // Zoom functionality for bodyFIT
+        bodyFitFormWrapper.addEventListener('wheel', (e) => {
+            // Only zoom if Ctrl key is pressed (trackpad pinch) or using mouse wheel
+            // Let normal trackpad scroll work without zooming
+            if (!e.ctrlKey) {
+                return; // Allow normal scrolling
+            }
+            
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            const newZoom = Math.min(Math.max(1, currentBodyFitZoom + delta), 3);
+            
+            if (newZoom !== currentBodyFitZoom) {
+                // Get mouse position relative to the wrapper
+                const rect = bodyFitFormWrapper.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                
+                // Calculate the point in the image under the mouse
+                const imagePointX = (bodyFitFormWrapper.scrollLeft + mouseX) / currentBodyFitZoom;
+                const imagePointY = (bodyFitFormWrapper.scrollTop + mouseY) / currentBodyFitZoom;
+                
+                // Update zoom
+                currentBodyFitZoom = newZoom;
+                bodyFitFormImage.style.width = (100 * currentBodyFitZoom) + '%';
+                
+                // Adjust scroll to keep the same point under the mouse
+                requestAnimationFrame(() => {
+                    bodyFitFormWrapper.scrollLeft = (imagePointX * currentBodyFitZoom) - mouseX;
+                    bodyFitFormWrapper.scrollTop = (imagePointY * currentBodyFitZoom) - mouseY;
+                });
+            }
+        });
+
+        bodyFitFormWrapper.addEventListener('mousedown', (e) => {
+            isBodyFitPanning = true;
+            bodyFitFormWrapper.style.cursor = 'grabbing';
+            bodyFitStartX = e.pageX - bodyFitFormWrapper.offsetLeft;
+            bodyFitStartY = e.pageY - bodyFitFormWrapper.offsetTop;
+            bodyFitScrollLeft = bodyFitFormWrapper.scrollLeft;
+            bodyFitScrollTop = bodyFitFormWrapper.scrollTop;
+        });
+
+        bodyFitFormWrapper.addEventListener('mouseleave', () => {
+            isBodyFitPanning = false;
+            bodyFitFormWrapper.style.cursor = 'grab';
+        });
+
+        bodyFitFormWrapper.addEventListener('mouseup', () => {
+            isBodyFitPanning = false;
+            bodyFitFormWrapper.style.cursor = 'grab';
+        });
+
+        bodyFitFormWrapper.addEventListener('mousemove', (e) => {
+            if (!isBodyFitPanning) return;
+            e.preventDefault();
+            const x = e.pageX - bodyFitFormWrapper.offsetLeft;
+            const y = e.pageY - bodyFitFormWrapper.offsetTop;
+            const walkX = (x - bodyFitStartX) * 2;
+            const walkY = (y - bodyFitStartY) * 2;
+            bodyFitFormWrapper.scrollLeft = bodyFitScrollLeft - walkX;
+            bodyFitFormWrapper.scrollTop = bodyFitScrollTop - walkY;
+        });
+
+        // Touch support for tablets (bodyFIT - not trackpads)
+        let bodyFitTouchStartDistance = 0;
+        let bodyFitTouchCenterX = 0;
+        let bodyFitTouchCenterY = 0;
+        
+        // Detect if device has actual touch screen (not just trackpad)
+        const isBodyFitTouchScreen = 'ontouchstart' in window && navigator.maxTouchPoints > 1;
+        
+        if (isBodyFitTouchScreen) {
+            bodyFitFormWrapper.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    bodyFitTouchStartDistance = Math.hypot(
+                        e.touches[0].pageX - e.touches[1].pageX,
+                        e.touches[0].pageY - e.touches[1].pageY
+                    );
+                    
+                    // Get the center point of the pinch gesture relative to the wrapper
+                    const rect = bodyFitFormWrapper.getBoundingClientRect();
+                    bodyFitTouchCenterX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
+                    bodyFitTouchCenterY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - rect.top;
+                }
+            });
+
+            bodyFitFormWrapper.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                const touchDistance = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                const delta = (touchDistance - bodyFitTouchStartDistance) * 0.01;
+                const newZoom = Math.min(Math.max(1, currentBodyFitZoom + delta), 3);
+                
+                if (newZoom !== currentBodyFitZoom) {
+                    // Store old scroll positions
+                    const oldScrollLeft = bodyFitFormWrapper.scrollLeft;
+                    const oldScrollTop = bodyFitFormWrapper.scrollTop;
+                    
+                    // Calculate the point in the image that's under the touch center
+                    const imagePointX = (oldScrollLeft + bodyFitTouchCenterX) / currentBodyFitZoom;
+                    const imagePointY = (oldScrollTop + bodyFitTouchCenterY) / currentBodyFitZoom;
+                    
+                    // Update zoom
+                    currentBodyFitZoom = newZoom;
+                    bodyFitFormImage.style.width = (100 * currentBodyFitZoom) + '%';
+                    
+                    // Calculate new scroll position to keep the same point under the touch
+                    requestAnimationFrame(() => {
+                        bodyFitFormWrapper.scrollLeft = (imagePointX * currentBodyFitZoom) - bodyFitTouchCenterX;
+                        bodyFitFormWrapper.scrollTop = (imagePointY * currentBodyFitZoom) - bodyFitTouchCenterY;
+                    });
+                    
+                    bodyFitTouchStartDistance = touchDistance;
+                }
+            }
+        });
+        }
+
+        function resetBodyFitState() {
+            currentBodyFitZoom = 1;
+            bodyFitFormImage.style.width = '100%';
+            bodyFitFormWrapper.scrollTop = 0;
+            bodyFitFormWrapper.scrollLeft = 0;
+        }
+
+        // Loading messages
+        const loadingMessages = [
+            "Sending data to server...",
+            "Analyzing body composition...",
+            "Calculating macronutrients...",
+            "Generating personalized plan...",
+            "Preparing your PDF..."
+        ];
+
+        let messageIndex = 0;
+        let messageInterval;
+        let currentStep = 1;
+
+        // DOM Elements
+        const form = document.getElementById('dietForm');
+        const mainContainer = document.getElementById('mainContainer');
+        const generateBtn = document.getElementById('generateBtn');
+        const regenerateBtn = document.getElementById('regenerateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const loadingState = document.getElementById('loadingState');
+        const pdfContainer = document.getElementById('pdfContainer');
+        const loadingMessageEl = document.getElementById('loadingMessage');
+        const bmrInput = document.getElementById('bmr');
+        const activityInput = document.getElementById('activity');
+        const caloriesInput = document.getElementById('calories');
+        const progressLine = document.getElementById('progressLine');
+
+        // Hide main container initially
+        mainContainer.style.display = 'none';
+
+        // Activity level multipliers - will be populated from API
+        let activityMultipliers = {};
+
+        // Auto-calculate calories when BMR or activity level changes
+        function calculateCalories() {
+            const bmr = parseFloat(bmrInput.value);
+            const activity = activityInput.value;
+            
+            if (bmr && activity && activityMultipliers[activity]) {
+                const calories = Math.round(bmr * activityMultipliers[activity]);
+                caloriesInput.value = calories;
+            }
+        }
+
+        bmrInput.addEventListener('input', calculateCalories);
+        activityInput.addEventListener('change', calculateCalories);
+
+        // Auto-capitalize first and last name
+        const firstNameInput = document.getElementById('firstName');
+        const lastNameInput = document.getElementById('lastName');
+        
+        function capitalizeInput(input) {
+            const value = input.value;
+            if (value.length > 0) {
+                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+        }
+        
+        firstNameInput.addEventListener('input', function() {
+            capitalizeInput(this);
+        });
+        
+        lastNameInput.addEventListener('input', function() {
+            capitalizeInput(this);
+        });
+
+        // Auto-format date input (DD/MM/YYYY)
+        const dobInput = document.getElementById('dob');
+        dobInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            let formattedValue = '';
+            
+            if (value.length >= 1) {
+                formattedValue = value.substring(0, 2);
+            }
+            if (value.length >= 3) {
+                formattedValue += '/' + value.substring(2, 4);
+            }
+            if (value.length >= 5) {
+                formattedValue += '/' + value.substring(4, 8);
+            }
+            
+            e.target.value = formattedValue;
+        });
+
+        // Step Navigation Functions
+        function nextStep(stepNumber) {
+            // Validate current step before proceeding
+            if (!validateCurrentStep()) {
+                return;
+            }
+
+            // Trigger animation based on step size comparison
+            const formCard = document.querySelector('.form-card');
+            const currentHeight = document.querySelector(`.step-content[data-step="${currentStep}"]`).offsetHeight;
+            const nextHeight = document.querySelector(`.step-content[data-step="${stepNumber}"]`).offsetHeight;
+            
+            // Determine zoom direction: zoom in if next step is larger, zoom out if smaller
+            const animationClass = nextHeight >= currentHeight ? 'step-transitioning-zoom-in' : 'step-transitioning-zoom-out';
+            formCard.classList.add(animationClass);
+            
+            setTimeout(() => {
+                currentStep = stepNumber;
+                updateStepDisplay();
+            }, 250);
+            
+            setTimeout(() => {
+                formCard.classList.remove(animationClass);
+            }, 500);
+        }
+
+        function prevStep(stepNumber) {
+            // Trigger animation based on step size comparison
+            const formCard = document.querySelector('.form-card');
+            const currentHeight = document.querySelector(`.step-content[data-step="${currentStep}"]`).offsetHeight;
+            const prevHeight = document.querySelector(`.step-content[data-step="${stepNumber}"]`).offsetHeight;
+            
+            // Determine zoom direction: zoom in if previous step is larger, zoom out if smaller
+            const animationClass = prevHeight >= currentHeight ? 'step-transitioning-zoom-in' : 'step-transitioning-zoom-out';
+            formCard.classList.add(animationClass);
+            
+            setTimeout(() => {
+                currentStep = stepNumber;
+                updateStepDisplay();
+            }, 250);
+            
+            setTimeout(() => {
+                formCard.classList.remove(animationClass);
+            }, 500);
+        }
+
+        function updateStepDisplay() {
+            // Update step content visibility
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelector(`.step-content[data-step="${currentStep}"]`).classList.add('active');
+
+            // Update step indicators
+            document.querySelectorAll('.step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                
+                if (stepNum === currentStep) {
+                    step.classList.add('active');
+                } else if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+
+            // Update progress line
+            const progress = ((currentStep - 1) / 2) * 100;
+            progressLine.style.width = progress + '%';
+        }
+
+        function updateFinalSummary() {
+            // Personal Details
+            const firstName = document.getElementById('firstName').value || '-';
+            const lastName = document.getElementById('lastName').value || '-';
+            document.getElementById('finalSummaryName').textContent = `${firstName} ${lastName}`;
+            
+            const dob = document.getElementById('dob').value || '-';
+            document.getElementById('finalSummaryDob').textContent = dob;
+            
+            const gender = document.querySelector('input[name="gender"]:checked')?.value || '-';
+            document.getElementById('finalSummaryGender').textContent = gender.charAt(0).toUpperCase() + gender.slice(1);
+            
+            // Goals & Preferences
+            const goalRadio = document.querySelector('input[name="goal"]:checked');
+            const goal = goalRadio?.getAttribute('data-text') || goalRadio?.id || '-';
+            const goalText = goal === 'maintain' ? 'Maintenance' : goal === 'lose' ? 'Weight Loss' : goal === 'gain' ? 'Weight Gain' : '-';
+            document.getElementById('finalSummaryGoal').textContent = goalText;
+            
+            const dietTypeSelect = document.getElementById('dietType');
+            const dietType = dietTypeSelect.selectedOptions[0]?.text || '-';
+            document.getElementById('finalSummaryDiet').textContent = dietType;
+            
+            const planStyleRadio = document.querySelector('input[name="dietPlan"]:checked');
+            const planStyle = planStyleRadio?.getAttribute('data-text') || planStyleRadio?.id || '-';
+            const planStyleText = planStyle === 'normal' ? 'Regular' : planStyle === 'if' ? 'Intermittent Fasting' : '-';
+            document.getElementById('finalSummaryPlanStyle').textContent = planStyleText;
+            
+            const activityOption = document.getElementById('activity').selectedOptions[0];
+            let activity = activityOption?.text || '-';
+            // Remove text in parentheses if present
+            if (activity.includes('(')) {
+                activity = activity.substring(0, activity.indexOf('(')).trim();
+            }
+            document.getElementById('finalSummaryActivity').textContent = activity;
+            
+            // Body Composition
+            const height = document.getElementById('height').value || '';
+            const heightItem = document.getElementById('summaryItemHeight');
+            if (height) {
+                document.getElementById('finalSummaryHeight').textContent = `${height} cm`;
+                heightItem.style.display = 'flex';
+            } else {
+                heightItem.style.display = 'none';
+            }
+            
+            const weight = document.getElementById('weight').value || '';
+            const weightItem = document.getElementById('summaryItemWeight');
+            if (weight) {
+                document.getElementById('finalSummaryWeight').textContent = `${weight} kg`;
+                weightItem.style.display = 'flex';
+            } else {
+                weightItem.style.display = 'none';
+            }
+            
+            const muscle = document.getElementById('muscle').value || '';
+            const muscleItem = document.getElementById('summaryItemMuscle');
+            if (muscle) {
+                document.getElementById('finalSummaryMuscle').textContent = `${muscle} kg`;
+                muscleItem.style.display = 'flex';
+            } else {
+                muscleItem.style.display = 'none';
+            }
+            
+            const fat = document.getElementById('fat').value || '';
+            const fatItem = document.getElementById('summaryItemFat');
+            if (fat) {
+                document.getElementById('finalSummaryFat').textContent = `${fat} kg`;
+                fatItem.style.display = 'flex';
+            } else {
+                fatItem.style.display = 'none';
+            }
+            
+            const lbm = document.getElementById('lbm').value || '';
+            const lbmItem = document.getElementById('summaryItemLBM');
+            if (lbm) {
+                document.getElementById('finalSummaryLBM').textContent = `${lbm} kg`;
+                lbmItem.style.display = 'flex';
+            } else {
+                lbmItem.style.display = 'none';
+            }
+            
+            const bmr = document.getElementById('bmr').value || '';
+            const bmrItem = document.getElementById('summaryItemBMR');
+            if (bmr) {
+                document.getElementById('finalSummaryBMR').textContent = `${bmr} kcal`;
+                bmrItem.style.display = 'flex';
+            } else {
+                bmrItem.style.display = 'none';
+            }
+            
+            const calories = document.getElementById('calories').value || '-';
+            document.getElementById('finalSummaryCalories').textContent = calories !== '-' ? `${calories} kcal` : '-';
+            
+            // Medical Conditions
+            const medicalConditions = getSelectedValues('medicalConditions');
+            const medicalSection = document.getElementById('medicalSection');
+            if (medicalConditions.length > 0) {
+                const medicalText = medicalConditions.map(val => {
+                    const checkbox = document.querySelector(`input[name="medicalConditions"][value="${val}"]`);
+                    return checkbox ? checkbox.nextElementSibling.textContent : val;
+                }).join(', ');
+                document.getElementById('finalSummaryMedical').textContent = medicalText;
+                medicalSection.style.display = 'block';
+            } else {
+                medicalSection.style.display = 'none';
+            }
+            
+            // Allergies
+            const allergies = getSelectedValues('allergies');
+            const allergiesSection = document.getElementById('allergiesSection');
+            if (allergies.length > 0) {
+                const allergiesText = allergies.map(val => {
+                    const checkbox = document.querySelector(`input[name="allergies"][value="${val}"]`);
+                    return checkbox ? checkbox.nextElementSibling.textContent : val;
+                }).join(', ');
+                document.getElementById('finalSummaryAllergies').textContent = allergiesText;
+                allergiesSection.style.display = 'block';
+            } else {
+                allergiesSection.style.display = 'none';
+            }
+        }
+
+        function validateCurrentStep() {
+            const currentStepContent = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+            const requiredInputs = currentStepContent.querySelectorAll('[required]');
+            
+            // Clear all previous error styling
+            currentStepContent.querySelectorAll('.form-group > label').forEach(label => {
+                label.style.color = '';
+            });
+            
+            let hasError = false;
+            
+            // Validate Step 2 field limits
+            if (currentStep === 2) {
+                const step2Fields = [
+                    { id: 'height', label: 'Height (cm)' },
+                    { id: 'weight', label: 'Weight (kg)' },
+                    { id: 'muscle', label: 'Muscle Mass (kg)' },
+                    { id: 'fat', label: 'Fat Mass (kg)' },
+                    { id: 'lbm', label: 'LBM (kg)' },
+                    { id: 'bmr', label: 'BMR (kcal)' },
+                    { id: 'calories', label: 'Daily Calories (kcal)' }
+                ];
+                
+                step2Fields.forEach(field => {
+                    const input = currentStepContent.querySelector(`#${field.id}`);
+                    if (input && input.value) {
+                        const value = parseFloat(input.value);
+                        const min = parseFloat(input.getAttribute('min'));
+                        const max = parseFloat(input.getAttribute('max'));
+                        
+                        if (!isNaN(value) && !isNaN(min) && !isNaN(max)) {
+                            if (value < min || value > max) {
+                                const label = currentStepContent.querySelector(`label[for="${field.id}"]`);
+                                if (label) {
+                                    label.style.color = '#dc2626';
+                                }
+                                if (!hasError) {
+                                    input.focus();
+                                    hasError = true;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Validate DOB if present in current step
+            const dobInput = currentStepContent.querySelector('#dob');
+            if (dobInput && dobInput.value) {
+                const dobValue = dobInput.value;
+                const dobPattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+                const match = dobValue.match(dobPattern);
+                
+                // Check if DOB is incomplete or doesn't match the full pattern
+                if (!match || dobValue.length < 10) {
+                    const label = currentStepContent.querySelector('label[for="dob"]');
+                    if (label) {
+                        label.style.color = '#dc2626';
+                    }
+                    if (!hasError) {
+                        dobInput.focus();
+                        hasError = true;
+                    }
+                } else {
+                    const day = parseInt(match[1], 10);
+                    const month = parseInt(match[2], 10);
+                    const year = parseInt(match[3], 10);
+                    
+                    // Validate date ranges
+                    const isValidDate = month >= 1 && month <= 12 && 
+                                       day >= 1 && day <= 31 && 
+                                       year >= 1900 && year <= new Date().getFullYear();
+                    
+                    // Check if date actually exists (e.g., no Feb 30)
+                    const date = new Date(year, month - 1, day);
+                    const dateExists = date.getMonth() === month - 1 && date.getDate() === day;
+                    
+                    // Check if date is not in the future
+                    const today = new Date();
+                    const isFuture = date > today;
+                    
+                    if (!isValidDate || !dateExists || isFuture) {
+                        const label = currentStepContent.querySelector('label[for="dob"]');
+                        if (label) {
+                            label.style.color = '#dc2626';
+                        }
+                        if (!hasError) {
+                            dobInput.focus();
+                            hasError = true;
+                        }
+                    }
+                }
+            }
+            
+            for (let input of requiredInputs) {
+                let isValid = false;
+                
+                if (input.type === 'radio') {
+                    const radioGroup = currentStepContent.querySelectorAll(`[name="${input.name}"]`);
+                    isValid = Array.from(radioGroup).some(radio => radio.checked);
+                } else if (input.tagName === 'SELECT') {
+                    isValid = input.value !== '';
+                } else {
+                    isValid = input.value.trim() !== '';
+                }
+                
+                if (!isValid) {
+                    // Find the label for this input
+                    let label = null;
+                    
+                    if (input.type === 'radio') {
+                        // For radio groups, find the main label (not the individual radio labels)
+                        const formGroup = input.closest('.form-group');
+                        if (formGroup) {
+                            label = formGroup.querySelector('.form-group > label:first-child');
+                            if (!label) {
+                                label = formGroup.querySelector('label:not([for])');
+                            }
+                        }
+                    } else if (input.id) {
+                        label = currentStepContent.querySelector(`label[for="${input.id}"]`);
+                    }
+                    
+                    if (!label) {
+                        // Find closest label
+                        const formGroup = input.closest('.form-group');
+                        if (formGroup) {
+                            label = formGroup.querySelector('.form-group > label:first-child');
+                        }
+                    }
+                    
+                    if (label) {
+                        label.style.color = '#dc2626';
+                    }
+                    
+                    if (!hasError) {
+                        input.focus();
+                        hasError = true;
+                    }
+                }
+            }
+            
+            return !hasError;
+        }
+
+        // Get selected values from checkboxes
+        function getSelectedValues(containerNameOrElement) {
+            // Handle both checkbox container name and legacy select element
+            let checkboxes;
+            if (typeof containerNameOrElement === 'string') {
+                checkboxes = document.querySelectorAll(`input[name="${containerNameOrElement}"]:checked`);
+            } else {
+                // Legacy support: if it's a select element, use old behavior
+                if (containerNameOrElement.tagName === 'SELECT') {
+                    const options = containerNameOrElement.selectedOptions;
+                    return Array.from(options).map(option => option.value);
+                }
+                return [];
+            }
+            return Array.from(checkboxes).map(cb => cb.value);
+        }
+
+        // Flag to track if we're regenerating
+        let isRegenerating = false;
+
+        // Form Submit - Send data to API
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate Step 2 body composition values before submitting
+            const step2Content = document.querySelector('.step-content[data-step="2"]');
+            const validationRules = [
+                { id: 'height', min: 50, max: 300 },
+                { id: 'weight', min: 30, max: 300 },
+                { id: 'muscle', min: 0, max: 200 },
+                { id: 'fat', min: 0, max: 200 },
+                { id: 'lbm', min: 0, max: 300 },
+                { id: 'bmr', min: 0, max: 10000 },
+                { id: 'calories', min: 500, max: 10000 }
+            ];
+            
+            let hasInvalidValue = false;
+            validationRules.forEach(rule => {
+                const input = document.getElementById(rule.id);
+                if (input && input.value) {
+                    const value = parseFloat(input.value);
+                    if (value < rule.min || value > rule.max) {
+                        hasInvalidValue = true;
+                    }
+                }
+            });
+            
+            // If there are invalid values, don't submit
+            if (hasInvalidValue) {
+                return;
+            }
+            
+            // Collect form data according to API specification
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                phone: "", // Optional - can be added to form later
+                email: "", // Optional - can be added to form later
+                gender: document.querySelector('input[name="gender"]:checked').value === 'male' ? 'M' : 'F',
+                activityLevelTypeEnumId: document.getElementById('activity').value,
+                dietaryTypeId: document.getElementById('dietType').value,
+                height: parseFloat(document.getElementById('height').value) || 0,
+                weight: parseFloat(document.getElementById('weight').value) || 0,
+                muscleMass: parseFloat(document.getElementById('muscle').value) || 0,
+                fatMass: parseFloat(document.getElementById('fat').value) || 0,
+                conditionIdSet: getSelectedValues('medicalConditions'),
+                conditionNote: "",
+                allergyIdSet: getSelectedValues('allergies'),
+                typeId: document.querySelector('input[name="goal"]:checked').value,
+                bmr: document.getElementById('bmr').value || "0",
+                lbm: document.getElementById('lbm').value || "0",
+                kilocalorieNeeded: parseFloat(document.getElementById('calories').value) || 0,
+                secondaryTypeId: document.querySelector('input[name="dietPlan"]:checked').value
+            };
+
+            console.log('Request payload:', JSON.stringify(formData, null, 2));
+
+            // Update final summary
+            updateFinalSummary();
+
+            // Only show transition animation if not regenerating
+            if (!isRegenerating) {
+                // Add transition animation
+                const formCard = document.querySelector('.form-card');
+                const previewPanel = document.querySelector('.preview-panel');
+                formCard.classList.add('transitioning-to-summary');
+
+                // Switch to app mode and summary mode with delay for animation
+                setTimeout(() => {
+                    mainContainer.classList.add('app-mode');
+                    formCard.classList.add('summary-mode');
+                    document.body.classList.add('summary-active');
+                    document.querySelector('.button-container').style.display = 'block';
+                    resetBtn.style.display = 'block';
+                    regenerateBtn.style.display = 'block';
+                    
+                    // Trigger preview panel reveal
+                    previewPanel.classList.add('revealing');
+                    
+                    // Clean up animation classes
+                    setTimeout(() => {
+                        formCard.classList.remove('transitioning-to-summary');
+                        previewPanel.classList.remove('revealing');
+                    }, 600);
+                }, 100);
+            }
+
+            // Show loading
+            showLoading();
+
+            try {
+                // Send data to API
+                const response = await fetch(`${API_CONFIG.baseUrl}/generate`, {
+                    method: 'POST',
+                    headers: API_CONFIG.headers,
+                    body: JSON.stringify(formData)
+                });
+
+                // Get response text first to see error details
+                const responseText = await response.text();
+                console.log('API Response Status:', response.status);
+                console.log('API Response Body:', responseText);
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} - ${responseText}`);
+                }
+
+                // Parse JSON response
+                const responseData = JSON.parse(responseText);
+                console.log('API Response:', responseData);
+                
+                // Add form data text values to response for PDF display
+                const goalRadio = document.querySelector('input[name="goal"]:checked');
+                const goal = goalRadio?.getAttribute('data-text') || goalRadio?.id || '';
+                responseData.goalText = goal === 'maintain' ? 'Maintenance' : goal === 'lose' ? 'Weight Loss' : goal === 'gain' ? 'Weight Gain' : 'N/A';
+                
+                // Display the response data
+                displayResponse(responseData);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error generating plan. Please try again.');
+            }
+        });
+
+        // Reset button
+        resetBtn.addEventListener('click', function() {
+            const formCard = document.querySelector('.form-card');
+            const previewPanel = document.querySelector('.preview-panel');
+            const downloadBtn = document.getElementById('downloadPdfBtn');
+            
+            // Reset regenerating flag
+            isRegenerating = false;
+            
+            // Add reverse transition animation
+            formCard.classList.add('transitioning-to-summary');
+            previewPanel.style.opacity = '0';
+            previewPanel.style.transform = 'translateX(50px) scale(0.95)';
+            previewPanel.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            setTimeout(() => {
+                mainContainer.classList.remove('app-mode');
+                formCard.classList.remove('summary-mode');
+                document.body.classList.remove('summary-active');
+                document.querySelector('.button-container').style.display = 'none';
+                resetBtn.style.display = 'none';
+                regenerateBtn.style.display = 'none';
+                loadingState.style.display = 'flex';
+                pdfContainer.classList.remove('active');
+                pdfContainer.innerHTML = '';
+                form.reset();
+                clearInterval(messageInterval);
+                messageIndex = 0;
+                currentStep = 1;
+                updateStepDisplay();
+                
+                // Hide download button
+                if (downloadBtn) {
+                    downloadBtn.classList.remove('visible');
+                }
+                
+                // Reset preview panel styles
+                previewPanel.style.opacity = '';
+                previewPanel.style.transform = '';
+                previewPanel.style.transition = '';
+                formCard.classList.remove('transitioning-to-summary');
+            }, 400);
+        });
+
+        // Regenerate button - keeps the same profile data
+        regenerateBtn.addEventListener('click', function() {
+            // Set flag to skip animation
+            isRegenerating = true;
+            
+            // Hide download button while regenerating
+            const downloadBtn = document.getElementById('downloadPdfBtn');
+            if (downloadBtn) {
+                downloadBtn.classList.remove('visible');
+            }
+            
+            // Keep the form data but regenerate the plan
+            pdfContainer.classList.remove('active');
+            pdfContainer.innerHTML = '';
+            showLoading();
+            
+            // Re-submit the form
+            form.dispatchEvent(new Event('submit'));
+        });
+
+        function showLoading() {
+            loadingState.style.display = 'flex';
+            pdfContainer.classList.remove('active');
+            messageIndex = 0;
+            loadingMessageEl.textContent = loadingMessages[0];
+            
+            // Cycle through loading messages
+            messageInterval = setInterval(() => {
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+                loadingMessageEl.textContent = loadingMessages[messageIndex];
+            }, 800);
+        }
+
+        async function displayResponse(data) {
+            // Add 3 second delay before showing diet plan
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            clearInterval(messageInterval);
+            loadingState.style.display = 'none';
+            pdfContainer.classList.add('active');
+            
+            // Store data globally
+            window.currentDietPlan = data;
+            
+            // Generate HTML diet plan instead of PDF
+            generateHTMLDietPlan(data);
+            
+            // Show download button
+            const downloadBtn = document.getElementById('downloadPdfBtn');
+            if (downloadBtn) {
+                downloadBtn.classList.add('visible');
+            }
+        }
+        
+        function generateHTMLDietPlan(apiResponse) {
+            const meals = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+            const foodData = apiResponse.foodDishByCategoryMap || {};
+            
+            // Check if there's breakfast data to determine plan type
+            const hasBreakfast = foodData['Breakfast'] && Object.keys(foodData['Breakfast']).length > 0;
+            const isIntermittentFasting = !hasBreakfast;
+            
+            let pagesHTML = '';
+            
+            if (isIntermittentFasting) {
+                // Intermittent Fasting: Page 1 = Lunch + Dinner, Page 2 = Snack + Recommendations
+                
+                // Page 1: Lunch and Dinner
+                let page1Content = `
+                    <div class="diet-type-wrapper">
+                        <div class="diet-type-section"><span class="diet-type-label">DIET TYPE:</span> <span class="diet-type-value">${apiResponse.goalText || 'N/A'}</span></div>
+                    </div>
+                `;
+                
+                ['Lunch', 'Dinner'].forEach(meal => {
+                    if (foodData[meal]) {
+                        page1Content += generateMealSection(meal, foodData[meal]);
+                    }
+                });
+                
+                pagesHTML += generatePage(apiResponse, page1Content);
+                
+                // Page 2: Snack and Recommendations
+                let page2Content = '';
+                
+                if (foodData['Snack']) {
+                    page2Content += generateMealSection('Snack', foodData['Snack']);
+                }
+                
+                // Add recommendations to page 2 for IF
+                if (apiResponse.ptcList && apiResponse.ptcList.length > 0) {
+                    page2Content += `
+                        <div class="diet-plan-section">
+                            <div class="meal-heading">GENERAL RECOMMENDATIONS</div>
+                            <div class="meal-underline"></div>
+                            <div class="recommendations-list">
+                    `;
+                    
+                    apiResponse.ptcList
+                        .sort((a, b) => a.sequenceNum - b.sequenceNum)
+                        .forEach(rec => {
+                            let comment = rec.comment;
+                            if (comment.includes(':')) {
+                                const colonIndex = comment.indexOf(':');
+                                const beforeColon = comment.substring(0, colonIndex + 1);
+                                const afterColon = comment.substring(colonIndex + 1);
+                                page2Content += `<div class="recommendation-item"><span class="rec-dash">-</span> <span class="rec-title">${beforeColon}</span>${afterColon}</div>`;
+                            } else {
+                                page2Content += `<div class="recommendation-item"><span class="rec-dash">-</span> ${comment}</div>`;
+                            }
+                        });
+                    
+                    page2Content += `</div></div>`;
+                }
+                
+                pagesHTML += generatePage(apiResponse, page2Content);
+                
+            } else {
+                // Regular Plan: Page 1 = Breakfast + Lunch, Page 2 = Dinner + Snack, Page 3 = Recommendations
+                
+                // Page 1: Breakfast and Lunch
+                let page1Content = `
+                    <div class="diet-type-wrapper">
+                        <div class="diet-type-section"><span class="diet-type-label">DIET TYPE:</span> <span class="diet-type-value">${apiResponse.goalText || 'N/A'}</span></div>
+                    </div>
+                `;
+                
+                ['Breakfast', 'Lunch'].forEach(meal => {
+                    if (foodData[meal]) {
+                        page1Content += generateMealSection(meal, foodData[meal]);
+                    }
+                });
+                
+                pagesHTML += generatePage(apiResponse, page1Content);
+                
+                // Page 2: Dinner and Snack
+                let page2Content = '';
+                ['Dinner', 'Snack'].forEach(meal => {
+                    if (foodData[meal]) {
+                        page2Content += generateMealSection(meal, foodData[meal]);
+                    }
+                });
+                
+                pagesHTML += generatePage(apiResponse, page2Content);
+                
+                // Page 3: Recommendations (separate page for regular plans)
+                if (apiResponse.ptcList && apiResponse.ptcList.length > 0) {
+                    let page3Content = `
+                        <div class="diet-plan-section">
+                            <div class="meal-heading">GENERAL RECOMMENDATIONS</div>
+                            <div class="meal-underline"></div>
+                            <div class="recommendations-list">
+                    `;
+                    
+                    apiResponse.ptcList
+                        .sort((a, b) => a.sequenceNum - b.sequenceNum)
+                        .forEach(rec => {
+                            let comment = rec.comment;
+                            if (comment.includes(':')) {
+                                const colonIndex = comment.indexOf(':');
+                                const beforeColon = comment.substring(0, colonIndex + 1);
+                                const afterColon = comment.substring(colonIndex + 1);
+                                page3Content += `<div class="recommendation-item"><span class="rec-dash">-</span> <span class="rec-title">${beforeColon}</span>${afterColon}</div>`;
+                            } else {
+                                page3Content += `<div class="recommendation-item"><span class="rec-dash">-</span> ${comment}</div>`;
+                            }
+                        });
+                    
+                    page3Content += `</div></div>`;
+                    pagesHTML += generatePage(apiResponse, page3Content);
+                }
+            }
+            
+            pdfContainer.innerHTML = `
+                <div class="diet-plan-container">
+                    ${pagesHTML}
+                </div>
+            `;
+        }
+        
+        function generatePage(apiResponse, content) {
+            // Format date as dd/mm/yyyy
+            let formattedDate = apiResponse.testDate || new Date().toLocaleDateString();
+            if (apiResponse.testDate) {
+                const date = new Date(apiResponse.testDate);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                formattedDate = `${day}/${month}/${year}`;
+            }
+            
+            // Capitalize name
+            const fullName = (apiResponse.fullName || 'N/A').toUpperCase();
+            
+            return `
+                <div class="diet-plan-page">
+                    <div class="page-background"></div>
+                    <div class="page-content">
+                        <div class="page-header">
+                            <div class="header-left">
+                                <div class="title-section">
+                                    <span class="title-diet">DIET</span>
+                                    <span class="title-plan">PLAN</span>
+                                </div>
+                                <div class="title-underline"></div>
+                                <div class="info-section">
+                                    <div class="info-row"><span class="info-label">NAME:</span> <span class="info-value name">${fullName}</span></div>
+                                    <div class="info-row"><span class="info-label">DATE:</span> <span class="info-value">${formattedDate}</span></div>
+                                </div>
+                            </div>
+                            <div class="header-right">
+                                <img src="assets/fit-logo.png" alt="FIT Logo" class="logo-img">
+                            </div>
+                        </div>
+                        ${content}
+                    </div>
+                    <div class="page-footer">© 2025 FIT SAL. All rights reserved.</div>
+                </div>
+            `;
+        }
+        
+        function generateMealSection(mealName, mealData) {
+            // Group items by their category (Seeds, Fruit, etc.)
+            let categories = [];
+            
+            Object.keys(mealData).forEach(category => {
+                let categoryItems = [];
+                Object.keys(mealData[category]).forEach(subcat => {
+                    const items = mealData[category][subcat];
+                    categoryItems = categoryItems.concat(items);
+                });
+                if (categoryItems.length > 0) {
+                    categories.push({
+                        name: category,
+                        items: categoryItems
+                    });
+                }
+            });
+            
+            // Create columns based on categories
+            let columnsHTML = '<div class="meal-columns">';
+            
+            categories.forEach((category, catIdx) => {
+                columnsHTML += '<div class="meal-column">';
+                category.items.forEach((item, idx) => {
+                    const quantity = Math.abs(item.quantity);
+                    const kcal = Math.abs(item.kilocaloriePerServe);
+                    columnsHTML += `
+                        <div class="food-item">
+                            <div class="food-name">${quantity} ${item.quantityUomDescription} ${item.foodDishName}</div>
+                            <div class="food-calories">${kcal.toFixed(2)}KCal</div>
+                            ${idx < category.items.length - 1 ? '<div class="food-or">Or</div>' : ''}
+                        </div>
+                    `;
+                });
+                columnsHTML += '</div>';
+            });
+            
+            columnsHTML += '</div>';
+            
+            return `
+                <div class="diet-plan-section">
+                    <div class="meal-heading">${mealName.toUpperCase()}</div>
+                    <div class="meal-underline"></div>
+                    ${columnsHTML}
+                </div>
+            `;
+        }
+    
+        // Download Diet Plan as PDF
+        async function downloadDietPlanPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdfContainer = document.getElementById('pdfContainer');
+            const downloadBtn = document.getElementById('downloadPdfBtn');
+            
+            if (!pdfContainer || !window.currentDietPlan) {
+                alert('No diet plan available to download');
+                return;
+            }
+            
+            // Disable button during generation
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Generating...';
+            
+            try {
+                const pages = pdfContainer.querySelectorAll('.diet-plan-page');
+                // Use custom page format for PDF (205mm x 290mm to match preview)
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: [205, 290], // Custom format matching preview
+                    compress: true
+                });
+                
+                // Store original states before manipulation
+                const originalHeights = [];
+                const logoData = [];
+                
+                pages.forEach((page, idx) => {
+                    originalHeights[idx] = page.style.height;
+                    
+                    // Find logo and make it narrower before capture
+                    const logo = page.querySelector('.logo-img');
+                    if (logo) {
+                        logoData[idx] = {
+                            element: logo,
+                            originalWidth: logo.style.width,
+                            originalHeight: logo.style.height,
+                            originalMaxWidth: logo.style.maxWidth
+                        };
+                        // Make logo narrower (30mm instead of 35mm) to compensate for PDF stretching
+                        logo.style.setProperty('width', '30mm', 'important');
+                        logo.style.setProperty('max-width', '30mm', 'important');
+                        logo.style.height = 'auto';
+                        // Force reflow to ensure the change is applied
+                        logo.offsetHeight;
+                    }
+                    
+                    page.style.height = '290mm';
+                });
+                
+                // Wait for the logo resize to render visibly
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                for (let i = 0; i < pages.length; i++) {
+                    const page = pages[i];
+                    
+                    // Capture the page as canvas with high quality settings
+                    const canvas = await html2canvas(page, {
+                        scale: 4, // High quality rendering
+                        useCORS: true,
+                        allowTaint: true,
+                        logging: false,
+                        backgroundColor: '#ffffff',
+                        letterRendering: true,
+                        imageTimeout: 0,
+                        removeContainer: false,
+                        foreignObjectRendering: false
+                    });
+                    
+                    // Convert to high quality JPEG (better for PDF file size)
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    const imgWidth = 205; // Width in mm (matches preview)
+                    const pdfPageHeight = 290; // PDF page height in mm
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    const finalHeight = Math.min(imgHeight, pdfPageHeight);
+                    
+                    if (i > 0) {
+                        pdf.addPage([205, 290]);
+                    }
+                    
+                    pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, finalHeight, undefined, 'FAST');
+                }
+                
+                // Restore original states
+                pages.forEach((page, idx) => {
+                    page.style.height = originalHeights[idx];
+                    if (logoData[idx]) {
+                        logoData[idx].element.style.width = logoData[idx].originalWidth;
+                        logoData[idx].element.style.height = logoData[idx].originalHeight;
+                        logoData[idx].element.style.maxWidth = logoData[idx].originalMaxWidth;
+                    }
+                });
+                
+                // Get user name for filename - format: "Client Name - Diet Plan.pdf"
+                const userName = window.currentDietPlan.fullName || 'Client';
+                const fileName = `${userName} - Diet Plan.pdf`;
+                
+                pdf.save(fileName);
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF. Please try again.');
+            } finally {
+                // Re-enable button
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Download PDF';
+            }
+        }
+
+        function showError(errorMessage) {
+            clearInterval(messageInterval);
+            loadingState.style.display = 'none';
+            pdfContainer.classList.add('active');
+            
+            pdfContainer.innerHTML = `
+                <div style="padding: 3rem; text-align: center;">
+                    <svg style="width: 64px; height: 64px; margin: 0 auto 1.5rem; color: #ef4444;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h3 style="color: #ef4444; font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Error Generating Plan</h3>
+                    <p style="color: #64748b; margin-bottom: 1.5rem;">Error generating plan. Please try again.</p>
+                    <button onclick="document.getElementById('resetBtn').click()" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+
+        // Auto-advance keyboard focus for text inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step 1: firstName -> lastName -> dob
+            const firstName = document.getElementById('firstName');
+            const lastName = document.getElementById('lastName');
+            const dob = document.getElementById('dob');
+
+            if (firstName) {
+                firstName.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        lastName.focus();
+                    }
+                });
+            }
+
+            if (lastName) {
+                lastName.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        dob.focus();
+                    }
+                });
+            }
+
+            // Step 2: height -> weight -> muscle -> fat -> lbm -> bmr -> calories (then close)
+            const height = document.getElementById('height');
+            const weight = document.getElementById('weight');
+            const muscle = document.getElementById('muscle');
+            const fat = document.getElementById('fat');
+            const lbm = document.getElementById('lbm');
+            const bmr = document.getElementById('bmr');
+            const calories = document.getElementById('calories');
+
+            if (height) {
+                height.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        weight.focus();
+                    }
+                });
+            }
+
+            if (weight) {
+                weight.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        muscle.focus();
+                    }
+                });
+            }
+
+            if (muscle) {
+                muscle.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        fat.focus();
+                    }
+                });
+            }
+
+            if (fat) {
+                fat.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        lbm.focus();
+                    }
+                });
+            }
+
+            if (lbm) {
+                lbm.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        bmr.focus();
+                    }
+                });
+            }
+
+            if (bmr) {
+                bmr.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        calories.focus();
+                    }
+                });
+            }
+
+            if (calories) {
+                calories.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === 'Next') {
+                        e.preventDefault();
+                        calories.blur(); // Close keyboard
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
