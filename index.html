@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIT Diet Simulator</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="icon" type="image/png" href="icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
@@ -153,6 +155,346 @@
             font-weight: 700;
             color: #1a202c;
             text-align: center;
+        }
+
+        .selection-card.small {
+            padding: 1rem;
+            min-width: 120px;
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: #1B3448;
+            margin-top: 0;
+        }
+
+        .selection-card.small .selection-card-title {
+            font-size: 1.8rem;
+        }
+
+        .selection-card.small img {
+            height: 70px;
+            width: auto;
+        }
+
+        /* deepFIT PDF Styles */
+        .deepfit-page {
+            width: 595px;
+            min-height: 842px;
+            background: white url('assets/deep-fit/logo-background.png') no-repeat center bottom;
+            background-size: 105%;
+            position: relative;
+            overflow: visible;
+            page-break-after: always;
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .deepfit-header {
+            background: #0c2b49;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .deepfit-header-title {
+            color: white;
+            font-size: 25px;
+            font-weight: 700;
+            letter-spacing: 0;
+            position: relative;
+        }
+
+        .deepfit-header-arrow {
+            position: absolute;
+            left: 33.25px;
+            top: -153px;
+            width: 409px;
+            height: 409px;
+            pointer-events: none;
+        }
+
+        .deepfit-header-logo {
+            height: 63px;
+            margin-left: auto;
+        }
+
+        .deepfit-content {
+            padding: 2px 40px 30px 40px;
+            position: relative;
+            min-height: 712px;
+        }
+
+        .deepfit-meal-page {
+            padding-top: 8px;
+        }
+
+        .meal-page {
+            padding-top: 8px;
+        }
+
+        .deepfit-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 400px;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .deepfit-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0;
+            font-size: 10px;
+            color: #1B3448;
+        }
+
+        .deepfit-footer-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding-left: 0px;
+        }
+
+        .deepfit-footer-left-content {
+            display: flex;
+            align-items: center;
+            gap: 0px;
+            margin-left: 10px;
+        }
+
+        .deepfit-footer-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-right: 0;
+        }
+
+        .deepfit-footer-icon {
+            height: 14px;
+            width: 14px;
+        }
+
+        .deepfit-footer-left-content .deepfit-footer-icon:last-of-type {
+            margin-right: 1px;
+        }
+
+        .deepfit-footer-right span {
+            margin-right: 10px;
+        }
+
+        .deepfit-footer-arrow {
+            height: 24px;
+            display: block;
+        }
+
+        .deepfit-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 2px;
+            margin-top: 8px;
+            line-height: 1.187;
+        }
+
+        .deepfit-info-row {
+            display: flex;
+            gap: 100px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            color: #000;
+        }
+
+        .deepfit-info-left {
+            flex: 1;
+            line-height: 1.187;
+        }
+
+        .deepfit-info-right {
+            flex: 1;
+            line-height: 1.187;
+            padding-top: 3px;
+        }
+
+        .deepfit-info-label {
+            font-weight: 700;
+            display: inline;
+        }
+
+        .deepfit-diet-intro {
+            font-size: 10px;
+            line-height: 1.125;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .deepfit-meal-header {
+            position: relative;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .deepfit-meal-icon {
+            position: absolute;
+            left: -38px;
+            top: -2px;
+            height: 36px;
+            width: 36px;
+        }
+
+        .deepfit-meal-header-content {
+            width: 100%;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .deepfit-meal-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .deepfit-meal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .deepfit-meal-arrow {
+            height: 20px;
+            margin-left: auto;
+        }
+
+        .deepfit-meal-underline {
+            position: absolute;
+            top: -146px;
+            width: 265px;
+            height: 343px;
+            pointer-events: none;
+        }
+
+        .deepfit-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin-bottom: 20px;
+            border: 0.8px solid #58838C;
+        }
+
+        .deepfit-table th {
+            background: transparent;
+            padding: 8px;
+            text-align: left;
+            font-weight: 700;
+            border: 0.8px solid #58838C;
+            font-size: 12px;
+        }
+
+        .deepfit-table td {
+            padding: 10px 8px 6px 8px;
+            border: 0.8px solid #58838C;
+            vertical-align: middle;
+            line-height: 1.15;
+        }
+
+        .deepfit-table ul {
+            margin: 0;
+            padding-left: 15px;
+            list-style: disc;
+        }
+
+        .deepfit-table li {
+            margin-bottom: 3px;
+            line-height: 1.15;
+        }
+
+        .deepfit-option-name {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 3px;
+            line-height: 1.15;
+        }
+
+        .deepfit-option-desc {
+            font-size: 9px;
+            color: #555;
+            line-height: 1.15;
+        }
+
+        .deepfit-guidelines-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .deepfit-guidelines-section {
+            margin-bottom: 10px;
+        }
+
+        .deepfit-guidelines-section h3 {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 3px;
+            color: #000;
+        }
+
+        .deepfit-guidelines-section p {
+            font-size: 12px;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            color: #333;
+            text-align: justify;
+        }
+
+        .deepfit-guidelines-section ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+            font-size: 12px;
+            line-height: 1.2;
+        }
+
+        .deepfit-guidelines-section ol {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 12px;
+            line-height: 1.2;
+        }
+
+        .deepfit-two-column {
+            display: flex;
+            gap: 30px;
+            margin-top: 5px;
+        }
+
+        .deepfit-column {
+            flex: 1;
+        }
+
+        .deepfit-column h4 {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .deepfit-column ul {
+            margin: 0;
+            padding-left: 0;
+            list-style: none;
+            font-size: 12px;
+            line-height: 1.2;
         }
 
         /* Header Back Link */
@@ -1518,6 +1860,51 @@
         .download-pdf-btn.visible {
             display: flex;
         }
+
+        .format-toggle-btn,
+        .edit-btn {
+            display: none;
+            padding: 0.4rem 0.85rem;
+            background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(91, 159, 164, 0.3);
+            transition: all 0.3s ease;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+            margin: 0;
+        }
+
+        .format-toggle-btn:hover,
+        .edit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(91, 159, 164, 0.4);
+        }
+
+        .format-toggle-btn:active,
+        .edit-btn:active {
+            transform: translateY(0);
+        }
+
+        .format-toggle-btn svg,
+        .edit-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .format-toggle-btn.visible,
+        .edit-btn.visible {
+            display: flex;
+        }
+
+        .edit-btn.editing {
+            background: linear-gradient(135deg, #DD5546 0%, #8B2E24 100%);
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1560,6 +1947,9 @@
                 <div class="selection-card-title" style="color: #58838C;">muscleFIT</div>
                 <img src="assets/muscleFIT.png" alt="muscleFIT Logo">
             </div>
+        </div>
+        <div class="selection-card small" onclick="selectDeepFIT()">
+            <img src="assets/deep-fit/deep-fit-logo.png" alt="deepFIT Logo">
         </div>
     </div>
 
@@ -1889,6 +2279,18 @@
                     <h2 class="preview-title">Diet Plan Preview</h2>
                     <div class="preview-badges">
                         <span class="status-badge">Personalized</span>
+                        <button class="format-toggle-btn" id="formatToggleBtn" onclick="toggleFormat()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12M8 12h12m-12 5h12M4 7h.01M4 12h.01M4 17h.01"></path>
+                            </svg>
+                            <span id="formatBtnText">Deep FIT</span>
+                        </button>
+                        <button class="edit-btn" id="editBtn" onclick="toggleEditMode()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            <span id="editBtnText">Edit</span>
+                        </button>
                         <button class="download-pdf-btn" id="downloadPdfBtn" onclick="downloadDietPlanPDF()">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -2014,6 +2416,958 @@
         </div>
     </div>
 
+    <!-- deepFIT Container -->
+    <div class="container app-mode hidden" id="deepFitContainer">
+        <div class="main-content">
+            <!-- Preview Panel for deepFIT -->
+            <div class="preview-panel" id="deepFitPreviewPanel" style="grid-column: 1 / -1;">
+                <div class="preview-header" style="margin-bottom: 0.6rem; padding-bottom: 0.3rem;">
+                    <h2 class="preview-title" style="margin-top: -0.7rem;">PDF Preview</h2>
+                    <div class="preview-badges" style="margin-top: -0.7rem;">
+                        <span class="status-badge">deepFIT</span>
+                    </div>
+                </div>
+
+                <!-- PDF Canvas Container -->
+                <div id="deepFitCanvasContainer" style="display: flex; flex-direction: column; gap: 20px; justify-content: flex-start; align-items: center; width: 100%; height: 100%; max-height: calc(100vh - 190px); overflow-y: auto; overflow-x: hidden; background: #f5f5f5; border-radius: 16px; padding: 2rem;">
+                    
+                    <!-- Page 1: Cover/Breakfast -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content">
+                            <div class="deepfit-info-row">
+                                <div class="deepfit-info-left">
+                                    <div><span class="deepfit-info-label">Name:</span></div>
+                                    <div><span class="deepfit-info-label">Age:</span></div>
+                                    <div><span class="deepfit-info-label">Date:</span></div>
+                                </div>
+                                <div class="deepfit-info-right">
+                                    <div><span class="deepfit-info-label">Next Check up:</span></div>
+                                    <div><span class="deepfit-info-label">Daily Calories:</span></div>
+                                </div>
+                            </div>
+                            
+                            <div class="deepfit-section-title">DIET TYPE:</div>
+                            <div class="deepfit-diet-intro">Welcome to your personalized diet plan! This guide is designed to provide you with a structured approach to healthy eating, offering three meal options and one snack daily, ensuring you receive a balanced intake of proteins, carbohydrates, and healthy fats. Choose the options that best fit your preferences and dietary needs.</div>
+                            
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Breakfast.png" class="deepfit-meal-icon" alt="Breakfast">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">MEAL 1: BREAKFAST <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 36%;">Options</th>
+                                        <th style="width: 34%;">Ingredients</th>
+                                        <th style="width: 30%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Oatmeal with Berries & Nuts</span>
+                                            <span class="deepfit-option-desc">Warm oats cooked in almond milk, topped with berries & nuts</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Rolled oats: 40 g</li>
+                                                <li>Unsweetened almond milk: 240 g</li>
+                                                <li>Mixed berries (strawberry, blueberry): 75 g</li>
+                                                <li>Mixed nuts (almonds & walnuts): 30 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 13 g</li>
+                                                <li>Carbs: 42 g</li>
+                                                <li>Fats: 21 g</li>
+                                                <li><strong>Calories: 400 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Greek Yogurt with Fruit & Granola</span>
+                                            <span class="deepfit-option-desc">Cold yogurt bowl combined with fresh fruit and granola</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Plain Greek yogurt: 240 g</li>
+                                                <li>Mixed fruit: 80 g</li>
+                                                <li>Granola: 30 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 28 g</li>
+                                                <li>Carbohydrates: 43 g</li>
+                                                <li>Fats: 11 g</li>
+                                                <li><strong>Calories: 373 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Eggs & Avocado Toast</span>
+                                            <span class="deepfit-option-desc">Hot eggs served with whole wheat toast and fresh avocado</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Eggs: 2 (120 g)</li>
+                                                <li>Whole wheat bread: 60 g</li>
+                                                <li>Avocado: 60 g</li>
+                                                <li>Olive oil: 5 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 14g</li>
+                                                <li>Carbs: 32g</li>
+                                                <li>Fats: 19g</li>
+                                                <li><strong>Calories: 350 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Cottage Cheese & Honey Toast</span>
+                                            <span class="deepfit-option-desc">Cold cottage cheese served with warm whole wheat toast and honey</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Cottage cheese: 200 g</li>
+                                                <li>Whole wheat toast: 60 g</li>
+                                                <li>Honey: 15 g</li>
+                                                <li>Walnuts: 15 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein 30 g</li>
+                                                <li>Carbs 42 g</li>
+                                                <li>Fats 15 g</li>
+                                                <li><strong>Calories: 420 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Protein Pancakes</span>
+                                            <span class="deepfit-option-desc">Hot pancakes made from blended oats, egg whites, and banana</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Rolled oats: 40 g</li>
+                                                <li>Egg whites: 120 g</li>
+                                                <li>Banana: 80 g</li>
+                                                <li>Peanut butter: 15 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein 26 g</li>
+                                                <li>Carbs 45 g</li>
+                                                <li>Fats 12 g</li>
+                                                <li><strong>Calories: 390 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Smoothie Bowl</span>
+                                            <span class="deepfit-option-desc">Cold blended bowl made from yogurt, banana, berries, and chia seeds</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Greek yogurt: 200 g</li>
+                                                <li>Banana: 100 g</li>
+                                                <li>Mixed berries: 80 g</li>
+                                                <li>Chia seeds: 10 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein 25 g</li>
+                                                <li>Carbs 44 g</li>
+                                                <li>Fats 10 g</li>
+                                                <li><strong>Calories: 380 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Labneh Plate</span>
+                                            <span class="deepfit-option-desc">Cold labneh served with olive oil, vegetables, and Arabic bread</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Labneh: 200 g</li>
+                                                <li>Olive oil: 10 g</li>
+                                                <li>Arabic bread: 60 g</li>
+                                                <li>Cucumber and tomato</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein 18 g</li>
+                                                <li>Carbs 40 g</li>
+                                                <li>Fats 22 g</li>
+                                                <li><strong>Calories: 420 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,200 Q150,100 300,200 T600,200 L600,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2: Lunch -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content meal-page">
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Lunch.png" class="deepfit-meal-icon" alt="Lunch">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">MEAL 2: LUNCH <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 38%;">Ingredients</th>
+                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Grilled Chicken Quinoa Salad</span>
+                                            <span class="deepfit-option-desc">Hot grilled chicken served over a cold quinoa and vegetable salad</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Chicken breast: 130 g</li>
+                                                <li>Cooked quinoa: 120 g</li>
+                                                <li>Cucumber: 80 g</li>
+                                                <li>Tomato: 80 g</li>
+                                                <li>Lettuce: 50 g</li>
+                                                <li>Olive oil and lemon: 10 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 40 g</li>
+                                                <li>Carbohydrates: 38 g</li>
+                                                <li>Fats: 14 g</li>
+                                                <li><strong>Calories: 480 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Steak Plate</span>
+                                            <span class="deepfit-option-desc">hot grilled steak served with roasted potatoes and green salad</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Steak (grilled): 150 g</li>
+                                                <li>Roasted potatoes: 180 g</li>
+                                                <li>Green salad (lettuce, cucumber)</li>
+                                                <li>Olive oil: 10 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 42 g</li>
+                                                <li>Carbohydrates: 35 g</li>
+                                                <li>Fats: 22 g</li>
+                                                <li><strong>Calories: 540 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Shrimp Stir-Fry</span>
+                                            <span class="deepfit-option-desc">Hot shrimp sautéed with vegetables and served with rice</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Shrimp: 160 g</li>
+                                                <li>Cooked white rice: 120 g</li>
+                                                <li>Bell peppers: 100 g</li>
+                                                <li>Onion: 50 g</li>
+                                                <li>Olive oil: 10 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 38 g</li>
+                                                <li>Carbohydrates: 42 g</li>
+                                                <li>Fats: 12 g</li>
+                                                <li><strong>Calories: 460 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Kafta Plate</span>
+                                            <span class="deepfit-option-desc">Hot grilled kafta served with bulgur and fresh salad</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Beef kafta: 160 g</li>
+                                                <li>Cooked bulgur: 140 g</li>
+                                                <li>Tomato and cucumber salad</li>
+                                                <li>Olive oil: 10 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 35 g</li>
+                                                <li>Carbohydrates: 38 g</li>
+                                                <li>Fats: 18 g</li>
+                                                <li><strong>Calories: 510 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">White Fish Potato Salad</span>
+                                            <span class="deepfit-option-desc">Cold white fish served with boiled potatoes and lemon dressing</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>White fish (cod or seabass): 160 g</li>
+                                                <li>Boiled potatoes: 180 g</li>
+                                                <li>Onion: 30 g</li>
+                                                <li>Olive oil + lemon: 10 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 36 g</li>
+                                                <li>Carbohydrates: 42 g</li>
+                                                <li>Fats: 10 g</li>
+                                                <li><strong>Calories: 460 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Cold Chicken Pasta Salad</span>
+                                            <span class="deepfit-option-desc">Cold pasta salad mixed with chicken, vegetables, and olive oil</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Chicken breast: 130 g</li>
+                                                <li>Cooked pasta: 140 g</li>
+                                                <li>Corn: 60 g</li>
+                                                <li>Cucumber: 80 g</li>
+                                                <li>Olive oil: 10 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 38 g</li>
+                                                <li>Carbohydrates: 45 g</li>
+                                                <li>Fats: 14 g</li>
+                                                <li><strong>Calories: 490 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Kafta Wrap</span>
+                                            <span class="deepfit-option-desc">Hot grilled kafta wrapped in Arabic bread with vegetables and yogurt sauce</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Kafta: 150 g</li>
+                                                <li>Arabic bread: 70 g</li>
+                                                <li>Tomato and lettuce</li>
+                                                <li>Yogurt sauce: 40 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 34 g</li>
+                                                <li>Carbohydrates: 44 g</li>
+                                                <li>Fats: 18 g</li>
+                                                <li><strong>Calories: 500 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,220 Q180,120 360,220 T720,220 L720,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 3: Dinner -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content meal-page">
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Dinner.png" class="deepfit-meal-icon" alt="Dinner">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">MEAL 3: DINNER <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 38%;">Options</th>
+                                        <th style="width: 33%;">Ingredients</th>
+                                        <th style="width: 29%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Grilled Salmon & Vegetables</span>
+                                            <span class="deepfit-option-desc">Grilled salmon served with sautéed seasonal vegetables</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Salmon fillet: 160 g</li>
+                                                <li>Zucchini: 150 g</li>
+                                                <li>Bell pepper: 100 g</li>
+                                                <li>Olive oil: 1 tsp (5 g)</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 36 g</li>
+                                                <li>Carbohydrates: 14 g</li>
+                                                <li>Fats: 21 g</li>
+                                                <li><strong>Calories: 400 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Chicken Breast & Roasted Vegetables</span>
+                                            <span class="deepfit-option-desc">grilled chicken breast served with oven-roasted vegetables</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Chicken breast: 180 g</li>
+                                                <li>Carrots: 120 g</li>
+                                                <li>Zucchini: 120 g</li>
+                                                <li>Olive oil: 1 tsp (5 g)</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 42 g</li>
+                                                <li>Carbohydrates: 16 g</li>
+                                                <li>Fats: 9 g</li>
+                                                <li><strong>Calories: 330 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Shrimp & Garlic Greens</span>
+                                            <span class="deepfit-option-desc">sautéed shrimp with garlic served over leafy greens</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Shrimp (peeled): 200 g</li>
+                                                <li>Spinach: 150 g</li>
+                                                <li>Garlic: 1 clove</li>
+                                                <li>Olive oil: 1 tsp (5 g)</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 40 g</li>
+                                                <li>Carbohydrates: 6 g</li>
+                                                <li>Fats: 7 g</li>
+                                                <li><strong>Calories: 280 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Steak & Green Beans</span>
+                                            <span class="deepfit-option-desc">grilled lean steak served with steamed green beans</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Beef steak (lean): 170 g</li>
+                                                <li>Green beans: 180 g</li>
+                                                <li>Olive oil: 1 tsp (5 g)</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 38 g</li>
+                                                <li>Carbohydrates: 10 g</li>
+                                                <li>Fats: 16 g</li>
+                                                <li><strong>Calories: 360 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,200 Q150,100 300,200 T600,200 L600,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 4: Snacks -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content meal-page">
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Snack.png" class="deepfit-meal-icon" alt="Snack">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">SNACKS</div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 38%;">Ingredients</th>
+                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Apple & Peanut Butter</span>
+                                            <span class="deepfit-option-desc">Fresh apple served with natural peanut butter</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Apple: 180 g</li>
+                                                <li>Natural peanut butter: 20 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 6 g</li>
+                                                <li>Carbohydrates: 30 g</li>
+                                                <li>Fats: 10 g</li>
+                                                <li><strong>Calories: 230 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Yogurt & Honey</span>
+                                            <span class="deepfit-option-desc">Plain yogurt lightly sweetened with honey</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Plain yogurt (2–3%): 200 g</li>
+                                                <li>Honey: 15 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 10 g</li>
+                                                <li>Carbohydrates: 28 g</li>
+                                                <li>Fats: 5 g</li>
+                                                <li><strong>Calories: 210 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Banana & Almonds</span>
+                                            <span class="deepfit-option-desc">Fresh banana paired with raw almonds</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Banana: 120 g</li>
+                                                <li>Almonds: 20 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 6 g</li>
+                                                <li>Carbohydrates: 28 g</li>
+                                                <li>Fats: 10 g</li>
+                                                <li><strong>Calories: 220 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Toast & Peanut Butter</span>
+                                            <span class="deepfit-option-desc">Whole wheat toast topped with natural peanut butter</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Whole wheat bread: 50 g</li>
+                                                <li>Natural peanut butter: 20 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 8 g</li>
+                                                <li>Carbohydrates: 26 g</li>
+                                                <li>Fats: 12 g</li>
+                                                <li><strong>Calories: 240 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Fruit & Yogurt</span>
+                                            <span class="deepfit-option-desc">Mixed fresh fruit served with plain yogurt</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Mixed fruit: 150 g</li>
+                                                <li>Plain yogurt: 150 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 9 g</li>
+                                                <li>Carbohydrates: 26 g</li>
+                                                <li>Fats: 4 g</li>
+                                                <li><strong>Calories: 200 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Cottage Cheese & Berries</span>
+                                            <span class="deepfit-option-desc">Cold cottage cheese served with fresh berries</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Cottage cheese: 200 g</li>
+                                                <li>Mixed berries: 80 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 24 g</li>
+                                                <li>Carbohydrates: 18 g</li>
+                                                <li>Fats: 5 g</li>
+                                                <li><strong>Calories: 210 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">Cheese & Crackers</span>
+                                            <span class="deepfit-option-desc">Semi-hard cheese served with whole-grain crackers</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Semi-hard cheese (emmental, gouda,or similar): 40 g</li>
+                                                <li>Whole-grain crackers: 30 g</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: 10 g</li>
+                                                <li>Carbohydrates: 22 g</li>
+                                                <li>Fats: 14 g</li>
+                                                <li><strong>Calories: 240 kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,250 Q200,150 400,250 T800,250 L800,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 5: Guidelines Introduction -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content">
+                            <div class="deepfit-guidelines-title">DAILY NUTRITION & LIFESTYLE GUIDELINES</div>
+                            <p class="deepfit-diet-intro" style="font-size: 12px;">These guidelines are designed to support your meal plan by focusing on daily habits that improve energy, digestion, recovery, and long-term health.</p>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Daily Foundations Summary</h3>
+                                <p style="margin-bottom: 5px;">Proper hydration supports digestion, appetite regulation, energy levels, skin health, and mental focus.</p>
+                                <ol>
+                                    <li>Upon waking: 1 glass of water.</li>
+                                    <li>Morning: 1–2 glasses between breakfast and lunch.</li>
+                                    <li>Afternoon: 1–2 glasses between lunch and dinner.</li>
+                                    <li>Evening: 1 glass, stopping at least 1 hour before bed.</li>
+                                    <li>Daily target: Women 1.8–2.2 L / Men 2.2–2.8 L.</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Hydration</h3>
+                                <p>Proper hydration supports digestion, appetite regulation, energy levels, skin health, and mental focus. Upon waking, drink one glass of water. In the morning, drink one to two glasses between breakfast and lunch. In the afternoon, drink one to two glasses between lunch and dinner. In the evening, drink one glass, stopping at least one hour before bed. The daily target is approximately 1.8 to 2.2 liters for women and 2.2 to 2.8 liters for men.</p>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Protein Intake</h3>
+                                <p>Protein supports muscle preservation, metabolism, blood sugar balance, and satiety. Aim for approximately 1.2 to 1.6 grams of protein per kilogram of body weight per day. Include a clear protein source at every main meal.</p>
+                                
+                                <div class="deepfit-two-column">
+                                    <div class="deepfit-column">
+                                        <h4>Animal-Based Proteins</h4>
+                                        <ul>
+                                            <li>Eggs / Egg Whites</li>
+                                            <li>Chicken / Turkey</li>
+                                            <li>Beef / Steak</li>
+                                            <li>Salmon / Tuna</li>
+                                            <li>White Fish</li>
+                                            <li>Shrimp / Seafood</li>
+                                            <li>Greek Yogurt / Labneh</li>
+                                            <li>Cottage Cheese</li>
+                                        </ul>
+                                    </div>
+                                    <div class="deepfit-column">
+                                        <h4>Plant-Based Proteins</h4>
+                                        <ul>
+                                            <li>Lentils</li>
+                                            <li>Chickpeas</li>
+                                            <li>Beans</li>
+                                            <li>Tofu / Tempeh</li>
+                                            <li>Quinoa</li>
+                                            <li>Edamame</li>
+                                            <li>Nuts & Seeds</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Vegetables & Fruits</h3>
+                                <p>Vegetables provide fiber, vitamins, minerals, and antioxidants essential for digestion and overall health. Aim for 6–8 servings daily. Fruits provide natural sugars and antioxidants; aim for 2–3 servings daily.</p>
+                                
+                                <div class="deepfit-two-column">
+                                    <div class="deepfit-column">
+                                        <h4>Vegetables</h4>
+                                        <ul>
+                                            <li>Spinach, arugula, kale</li>
+                                            <li>Lettuce varieties</li>
+                                            <li>Broccoli, cauliflower</li>
+                                            <li>Zucchini, eggplant</li>
+                                            <li>Carrots, beets</li>
+                                            <li>Mushrooms</li>
+                                            <li>Green beans</li>
+                                            <li>Bell peppers</li>
+                                            <li>Tomatoes, cucumbers</li>
+                                            <li>Onions, garlic</li>
+                                        </ul>
+                                    </div>
+                                    <div class="deepfit-column">
+                                        <h4>Fruits</h4>
+                                        <ul>
+                                            <li>Berries</li>
+                                            <li>Apples, pears</li>
+                                            <li>Oranges, mandarins</li>
+                                            <li>Banana</li>
+                                            <li>Mango, pineapple</li>
+                                            <li>Grapes, cherries</li>
+                                            <li>Melon</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,280 Q250,180 500,280 L500,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 6: Detailed Guidelines -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content">
+                            <div class="deepfit-guidelines-title">DAILY NUTRITION & LIFESTYLE GUIDELINES</div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Complex Carbohydrates</h3>
+                                <p>Complex carbohydrates fuel the brain, support hormonal health, and aid recovery. Best consumed in the morning and post-activity.</p>
+                                <ul>
+                                    <li>Rice (white, brown, black)</li>
+                                    <li>Potatoes & sweet potatoes</li>
+                                    <li>Quinoa</li>
+                                    <li>Bulgur</li>
+                                    <li>Oats</li>
+                                    <li>Pasta (moderate portions)</li>
+                                    <li>Whole-grain bread</li>
+                                    <li>Beans & lentils</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Healthy Fats</h3>
+                                <p>Healthy fats support hormone production, nutrient absorption, brain function, and satiety. Include 1–2 sources daily.</p>
+                                <ul>
+                                    <li>Olive oil</li>
+                                    <li>Avocado</li>
+                                    <li>Nuts & seeds</li>
+                                    <li>Nut butters</li>
+                                    <li>Fatty fish</li>
+                                    <li>Cheese (non-processed)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Sleep & Recovery</h3>
+                                <p>Aim for 7–9 hours of sleep per night. Consistent sleep and wake times support appetite regulation, recovery, and overall well-being.</p>
+                            </div>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,250 Q200,150 400,250 T800,250 L800,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- bodyFIT Container -->
     <div class="container app-mode hidden" id="bodyFitContainer">
         <div class="main-content">
@@ -2069,6 +3423,37 @@
         });
 
         // Page Navigation
+        function selectDeepFIT() {
+            const selectionPage = document.getElementById('selectionPage');
+            const header = document.querySelector('.header');
+            const deepFitContainer = document.getElementById('deepFitContainer');
+            const headerBrandName = document.getElementById('headerBrandName');
+            
+            // Update header text
+            headerBrandName.textContent = 'PDF Builder';
+            
+            // Fade out selection page
+            selectionPage.classList.add('fade-out');
+            
+            setTimeout(() => {
+                selectionPage.classList.add('hidden');
+                selectionPage.classList.remove('fade-out');
+                
+                // Show and fade in header and deepFIT container
+                header.classList.add('visible');
+                deepFitContainer.classList.remove('hidden');
+                deepFitContainer.style.display = 'flex';
+                deepFitContainer.classList.add('fade-in');
+                
+                // Disable page scrolling
+                document.body.style.overflow = 'hidden';
+                
+                setTimeout(() => {
+                    deepFitContainer.classList.remove('fade-in');
+                }, 400);
+            }, 400);
+        }
+
         function selectBodyFIT() {
             const selectionPage = document.getElementById('selectionPage');
             const header = document.querySelector('.header');
@@ -2160,6 +3545,7 @@
             const mainContainer = document.getElementById('mainContainer');
             const valdContainer = document.getElementById('valdContainer');
             const bodyFitContainer = document.getElementById('bodyFitContainer');
+            const deepFitContainer = document.getElementById('deepFitContainer');
             const selectionPage = document.getElementById('selectionPage');
             
             // Fade out active container
@@ -2168,6 +3554,8 @@
                 activeContainer = valdContainer;
             } else if (bodyFitContainer.style.display !== 'none' && !bodyFitContainer.classList.contains('hidden')) {
                 activeContainer = bodyFitContainer;
+            } else if (deepFitContainer.style.display !== 'none' && !deepFitContainer.classList.contains('hidden')) {
+                activeContainer = deepFitContainer;
             }
             activeContainer.classList.add('fade-out');
             
@@ -2178,6 +3566,8 @@
                 valdContainer.classList.add('hidden');
                 bodyFitContainer.style.display = 'none';
                 bodyFitContainer.classList.add('hidden');
+                deepFitContainer.style.display = 'none';
+                deepFitContainer.classList.add('hidden');
                 activeContainer.classList.remove('fade-out');
                 
                 // Re-enable page scrolling
@@ -3643,6 +5033,19 @@
                 const goal = goalRadio?.getAttribute('data-text') || goalRadio?.id || '';
                 responseData.goalText = goal === 'maintain' ? 'Maintenance' : goal === 'lose' ? 'Weight Loss' : goal === 'gain' ? 'Weight Gain' : 'N/A';
                 
+                // Add DOB from form for age calculation
+                const dobValue = document.getElementById('dob').value;
+                if (dobValue) {
+                    // Convert DD/MM/YYYY to ISO format for date parsing
+                    const dobParts = dobValue.split('/');
+                    if (dobParts.length === 3) {
+                        responseData.dob = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`; // YYYY-MM-DD
+                    }
+                }
+                
+                // Add calories from form
+                responseData.kcalTotalNeeded = parseFloat(document.getElementById('calories').value) || 0;
+                
                 // Display the response data
                 displayResponse(responseData);
 
@@ -3740,14 +5143,578 @@
             // Store data globally
             window.currentDietPlan = data;
             
-            // Generate HTML diet plan instead of PDF
-            generateHTMLDietPlan(data);
+            // Generate HTML diet plan based on current format
+            if (currentFormat === 'deepfit') {
+                generateDeepFITDietPlan(data);
+            } else {
+                generateHTMLDietPlan(data);
+            }
             
-            // Show download button
+            // Show download, format toggle, and edit buttons
             const downloadBtn = document.getElementById('downloadPdfBtn');
+            const formatToggleBtn = document.getElementById('formatToggleBtn');
+            const editBtn = document.getElementById('editBtn');
             if (downloadBtn) {
                 downloadBtn.classList.add('visible');
             }
+            if (formatToggleBtn) {
+                formatToggleBtn.classList.add('visible');
+            }
+            if (editBtn) {
+                editBtn.classList.add('visible');
+            }
+        }
+        
+        let isEditMode = false;
+        let currentFormat = 'nutrifit'; // 'nutrifit' or 'deepfit'
+        
+        function toggleFormat() {
+            // Toggle between formats
+            currentFormat = currentFormat === 'nutrifit' ? 'deepfit' : 'nutrifit';
+            
+            // Update button text
+            const formatBtn = document.getElementById('formatToggleBtn');
+            const formatBtnText = document.getElementById('formatBtnText');
+            if (formatBtnText) {
+                formatBtnText.textContent = currentFormat === 'nutrifit' ? 'Deep FIT' : 'FIT';
+            }
+            
+            // Regenerate the plan with new format
+            if (window.currentDietPlan) {
+                if (currentFormat === 'deepfit') {
+                    generateDeepFITDietPlan(window.currentDietPlan);
+                } else {
+                    generateHTMLDietPlan(window.currentDietPlan);
+                }
+            }
+        }
+        
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const editBtn = document.getElementById('editBtn');
+            const editBtnText = document.getElementById('editBtnText');
+            const pdfContainer = document.getElementById('pdfContainer');
+            
+            if (isEditMode) {
+                // Enable editing
+                editBtn.classList.add('editing');
+                editBtnText.textContent = 'Done';
+                
+                // Make all diet plan content editable
+                const editableElements = pdfContainer.querySelectorAll(
+                    '.info-value, .diet-type-value, .meal-heading, .food-name, .food-item, .recommendation-item'
+                );
+                editableElements.forEach(el => {
+                    el.setAttribute('contenteditable', 'true');
+                });
+            } else {
+                // Disable editing
+                editBtn.classList.remove('editing');
+                editBtnText.textContent = 'Edit';
+                
+                // Remove contenteditable from all elements
+                const editableElements = pdfContainer.querySelectorAll('[contenteditable="true"]');
+                editableElements.forEach(el => {
+                    el.removeAttribute('contenteditable');
+                });
+            }
+        }
+        
+        function generateDeepFITDietPlan(apiResponse) {
+            const pdfContainer = document.getElementById('pdfContainer');
+            const foodData = apiResponse.foodDishByCategoryMap || {};
+            
+            // Calculate age from DOB
+            let age = '';
+            if (apiResponse.dob) {
+                const birthDate = new Date(apiResponse.dob);
+                const today = new Date();
+                age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+            }
+            
+            // Format date as dd/mm/yyyy
+            let formattedDate = new Date().toLocaleDateString('en-GB');
+            if (apiResponse.testDate) {
+                const date = new Date(apiResponse.testDate);
+                formattedDate = date.toLocaleDateString('en-GB');
+            }
+            
+            // Get name (keep original case - proper case)
+            const fullName = apiResponse.fullName || '';
+            
+            // Get calories
+            const calories = apiResponse.kcalTotalNeeded || '';
+            
+            // Get diet type
+            const dietType = apiResponse.goalText || '';
+            
+            // Helper function to generate meal rows
+            function generateMealRows(mealData) {
+                console.log('generateMealRows received:', mealData);
+                if (!mealData) return '<tr><td colspan="3" style="text-align: center;">No meal data available</td></tr>';
+                
+                let rows = '';
+                let rowCount = 0;
+                const maxRows = 7;
+                
+                // Iterate through groups (HealthyFat, Vegetables, LeanProtein, etc.)
+                for (const groupId in mealData) {
+                    if (rowCount >= maxRows) break;
+                    
+                    const classifications = mealData[groupId];
+                    console.log(`Group: ${groupId}, Classifications:`, classifications);
+                    
+                    // Iterate through classifications (HighProtein, HighFiber, etc.)
+                    for (const classification in classifications) {
+                        if (rowCount >= maxRows) break;
+                        
+                        const items = classifications[classification];
+                        console.log(`Classification: ${classification}, Items:`, items);
+                        
+                        if (Array.isArray(items) && items.length > 0) {
+                            items.forEach(item => {
+                                if (rowCount >= maxRows) return;
+                                
+                                const foodName = item.foodDishName || '';
+                                const calories = item.kilocaloriePerServe || item.kcal || item.calories || 0;
+                                
+                                rows += `
+                                    <tr>
+                                        <td>
+                                            <span class="deepfit-option-name">${foodName}</span>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>No ingredients</li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li>Protein: -</li>
+                                                <li>Carbs: -</li>
+                                                <li>Fats: -</li>
+                                                <li><strong>Calories: ${calories} kcal</strong></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                `;
+                                rowCount++;
+                            });
+                        }
+                    }
+                }
+                
+                return rows || '<tr><td colspan="3" style="text-align: center;">No items available</td></tr>';
+            }
+            
+            // Generate the HTML
+            pdfContainer.innerHTML = `
+                <div id="deepFitCanvasContainer" style="display: flex; flex-direction: column; gap: 20px; justify-content: flex-start; align-items: center; width: 100%; height: 100%; max-height: calc(100vh - 190px); overflow-y: auto; overflow-x: hidden; background: #f5f5f5; border-radius: 16px; padding: 2rem;">
+                    
+                    <!-- Page 1: Cover/Breakfast -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content">
+                            <div class="deepfit-info-row">
+                                <div class="deepfit-info-left">
+                                    <div><span class="deepfit-info-label">Name:</span> ${fullName}</div>
+                                    <div><span class="deepfit-info-label">Age:</span> ${age}</div>
+                                    <div><span class="deepfit-info-label">Date:</span> ${formattedDate}</div>
+                                </div>
+                                <div class="deepfit-info-right">
+                                    <div><span class="deepfit-info-label">Next Check up:</span> </div>
+                                    <div><span class="deepfit-info-label">Daily Calories:</span> ${calories}</div>
+                                </div>
+                            </div>
+                            
+                            <div style="font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; color: #000; margin-bottom: 2px; margin-top: 8px; line-height: 1.187;"><span style="font-weight: 700;">DIET TYPE:</span> ${dietType}</div>
+                            <div class="deepfit-diet-intro">Welcome to your personalized diet plan! This guide is designed to provide you with a structured approach to healthy eating, offering three meal options and one snack daily, ensuring you receive a balanced intake of proteins, carbohydrates, and healthy fats. Choose the options that best fit your preferences and dietary needs.</div>
+                            
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Breakfast.png" class="deepfit-meal-icon" alt="Breakfast">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">MEAL 1: BREAKFAST <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 36%;">Options</th>
+                                        <th style="width: 36%;">Ingredients</th>
+                                        <th style="width: 28%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${generateMealRows(foodData['Breakfast'])}
+                                </tbody>
+                            </table>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,250 Q200,150 400,250 T800,250 L800,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 2: Lunch -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content deepfit-meal-page">
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Lunch.png" class="deepfit-meal-icon" alt="Lunch">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">MEAL 2: LUNCH <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 38%;">Ingredients</th>
+                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${generateMealRows(foodData['Lunch'])}
+                                </tbody>
+                            </table>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,280 Q250,180 500,280 L500,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 3: Dinner -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content deepfit-meal-page">
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Dinner.png" class="deepfit-meal-icon" alt="Dinner">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">MEAL 3: DINNER <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 38%;">Ingredients</th>
+                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${generateMealRows(foodData['Dinner'])}
+                                </tbody>
+                            </table>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,250 Q200,150 400,250 T800,250 L800,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 4: Snacks -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content deepfit-meal-page">
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Snack.png" class="deepfit-meal-icon" alt="Snack">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">SNACKS</div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 38%;">Ingredients</th>
+                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${generateMealRows(foodData['Snack'])}
+                                </tbody>
+                            </table>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,250 Q200,150 400,250 T800,250 L800,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 5: Guidelines Introduction -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content">
+                            <div class="deepfit-guidelines-title">DAILY NUTRITION & LIFESTYLE GUIDELINES</div>
+                            <p class="deepfit-diet-intro" style="font-size: 12px;">These guidelines are designed to support your meal plan by focusing on daily habits that improve energy, digestion, recovery, and long-term health.</p>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Daily Foundations Summary</h3>
+                                <p style="margin-bottom: 5px;">Proper hydration supports digestion, appetite regulation, energy levels, skin health, and mental focus.</p>
+                                <ol>
+                                    <li>Upon waking: 1 glass of water.</li>
+                                    <li>Morning: 1–2 glasses between breakfast and lunch.</li>
+                                    <li>Afternoon: 1–2 glasses between lunch and dinner.</li>
+                                    <li>Evening: 1 glass, stopping at least 1 hour before bed.</li>
+                                    <li>Daily target: Women 1.8–2.2 L / Men 2.2–2.8 L.</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Hydration</h3>
+                                <p>Proper hydration supports digestion, appetite regulation, energy levels, skin health, and mental focus. Upon waking, drink one glass of water. In the morning, drink one to two glasses between breakfast and lunch. In the afternoon, drink one to two glasses between lunch and dinner. In the evening, drink one glass, stopping at least one hour before bed. The daily target is approximately 1.8 to 2.2 liters for women and 2.2 to 2.8 liters for men.</p>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Protein Intake</h3>
+                                <p>Protein supports muscle preservation, metabolism, blood sugar balance, and satiety. Aim for approximately 1.2 to 1.6 grams of protein per kilogram of body weight per day. Include a clear protein source at every main meal.</p>
+                                
+                                <div class="deepfit-two-column">
+                                    <div class="deepfit-column">
+                                        <h4>Animal-Based Proteins</h4>
+                                        <ul>
+                                            <li>Eggs / Egg Whites</li>
+                                            <li>Chicken / Turkey</li>
+                                            <li>Beef / Steak</li>
+                                            <li>Salmon / Tuna</li>
+                                            <li>White Fish</li>
+                                            <li>Shrimp / Seafood</li>
+                                            <li>Greek Yogurt / Labneh</li>
+                                            <li>Cottage Cheese</li>
+                                        </ul>
+                                    </div>
+                                    <div class="deepfit-column">
+                                        <h4>Plant-Based Proteins</h4>
+                                        <ul>
+                                            <li>Lentils</li>
+                                            <li>Chickpeas</li>
+                                            <li>Beans</li>
+                                            <li>Tofu / Tempeh</li>
+                                            <li>Quinoa</li>
+                                            <li>Edamame</li>
+                                            <li>Nuts & Seeds</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Vegetables & Fruits</h3>
+                                <p>Vegetables provide fiber, vitamins, minerals, and antioxidants essential for digestion and overall health. Aim for 6–8 servings daily. Fruits provide natural sugars and antioxidants; aim for 2–3 servings daily.</p>
+                                
+                                <div class="deepfit-two-column">
+                                    <div class="deepfit-column">
+                                        <h4>Vegetables</h4>
+                                        <ul>
+                                            <li>Spinach, arugula, kale</li>
+                                            <li>Lettuce varieties</li>
+                                            <li>Broccoli, cauliflower</li>
+                                            <li>Zucchini, eggplant</li>
+                                            <li>Carrots, beets</li>
+                                            <li>Mushrooms</li>
+                                            <li>Green beans</li>
+                                            <li>Bell peppers</li>
+                                            <li>Tomatoes, cucumbers</li>
+                                            <li>Onions, garlic</li>
+                                        </ul>
+                                    </div>
+                                    <div class="deepfit-column">
+                                        <h4>Fruits</h4>
+                                        <ul>
+                                            <li>Berries</li>
+                                            <li>Apples, pears</li>
+                                            <li>Oranges, mandarins</li>
+                                            <li>Banana</li>
+                                            <li>Mango, pineapple</li>
+                                            <li>Grapes, cherries</li>
+                                            <li>Melon</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,280 Q250,180 500,280 L500,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 6: Detailed Guidelines -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content">
+                            <div class="deepfit-guidelines-title">DAILY NUTRITION & LIFESTYLE GUIDELINES</div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Complex Carbohydrates</h3>
+                                <p>Complex carbohydrates fuel the brain, support hormonal health, and aid recovery. Best consumed in the morning and post-activity.</p>
+                                <ul>
+                                    <li>Rice (white, brown, black)</li>
+                                    <li>Potatoes & sweet potatoes</li>
+                                    <li>Quinoa</li>
+                                    <li>Bulgur</li>
+                                    <li>Oats</li>
+                                    <li>Pasta (moderate portions)</li>
+                                    <li>Whole-grain bread</li>
+                                    <li>Beans & lentils</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Healthy Fats</h3>
+                                <p>Healthy fats support hormone production, nutrient absorption, brain function, and satiety. Include 1–2 sources daily.</p>
+                                <ul>
+                                    <li>Olive oil</li>
+                                    <li>Avocado</li>
+                                    <li>Nuts & seeds</li>
+                                    <li>Nut butters</li>
+                                    <li>Fatty fish</li>
+                                    <li>Cheese (non-processed)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="deepfit-guidelines-section">
+                                <h3>Sleep & Recovery</h3>
+                                <p>Aim for 7–9 hours of sleep per night. Consistent sleep and wake times support appetite regulation, recovery, and overall well-being.</p>
+                            </div>
+                            
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,250 Q200,150 400,250 T800,250 L800,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            `;
         }
         
         function generateHTMLDietPlan(apiResponse) {
@@ -3912,7 +5879,7 @@
                         </div>
                         ${content}
                     </div>
-                    <div class="page-footer">© 2025 FIT SAL. All rights reserved.</div>
+                    <div class="page-footer">© 2026 FIT SAL. All rights reserved.</div>
                 </div>
             `;
         }
@@ -3981,40 +5948,67 @@
             downloadBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Generating...';
             
             try {
-                const pages = pdfContainer.querySelectorAll('.diet-plan-page');
-                // Use custom page format for PDF (205mm x 290mm to match preview)
-                const pdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: [205, 290], // Custom format matching preview
-                    compress: true
-                });
+                // Detect which format is currently displayed
+                let pages;
+                let pdfConfig;
+                
+                if (currentFormat === 'deepfit') {
+                    // DeepFIT format uses A4 size (210x297mm)
+                    pages = pdfContainer.querySelectorAll('.deepfit-page');
+                    pdfConfig = {
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4', // 210x297mm
+                        compress: true
+                    };
+                } else {
+                    // NutriFIT format uses custom size (205x290mm)
+                    pages = pdfContainer.querySelectorAll('.diet-plan-page');
+                    pdfConfig = {
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: [205, 290],
+                        compress: true
+                    };
+                }
+                
+                if (pages.length === 0) {
+                    alert('No pages found to download');
+                    return;
+                }
+                
+                const pdf = new jsPDF(pdfConfig);
                 
                 // Store original states before manipulation
                 const originalHeights = [];
                 const logoData = [];
                 
+                // For deepFIT, use pixel-based height; for nutriFIT, use mm
+                const pageHeight = currentFormat === 'deepfit' ? '842px' : '290mm';
+                
                 pages.forEach((page, idx) => {
                     originalHeights[idx] = page.style.height;
                     
-                    // Find logo and make it narrower before capture
-                    const logo = page.querySelector('.logo-img');
-                    if (logo) {
-                        logoData[idx] = {
-                            element: logo,
-                            originalWidth: logo.style.width,
-                            originalHeight: logo.style.height,
-                            originalMaxWidth: logo.style.maxWidth
-                        };
-                        // Make logo narrower (30mm instead of 35mm) to compensate for PDF stretching
-                        logo.style.setProperty('width', '30mm', 'important');
-                        logo.style.setProperty('max-width', '30mm', 'important');
-                        logo.style.height = 'auto';
-                        // Force reflow to ensure the change is applied
-                        logo.offsetHeight;
+                    // Find logo and make it narrower before capture (only for nutriFIT)
+                    if (currentFormat === 'nutrifit') {
+                        const logo = page.querySelector('.logo-img');
+                        if (logo) {
+                            logoData[idx] = {
+                                element: logo,
+                                originalWidth: logo.style.width,
+                                originalHeight: logo.style.height,
+                                originalMaxWidth: logo.style.maxWidth
+                            };
+                            // Make logo narrower (30mm instead of 35mm) to compensate for PDF stretching
+                            logo.style.setProperty('width', '30mm', 'important');
+                            logo.style.setProperty('max-width', '30mm', 'important');
+                            logo.style.height = 'auto';
+                            // Force reflow to ensure the change is applied
+                            logo.offsetHeight;
+                        }
                     }
                     
-                    page.style.height = '290mm';
+                    page.style.height = pageHeight;
                 });
                 
                 // Wait for the logo resize to render visibly
@@ -4025,7 +6019,7 @@
                     
                     // Capture the page as canvas with high quality settings
                     const canvas = await html2canvas(page, {
-                        scale: 4, // High quality rendering
+                        scale: 4, // High quality rendering for all formats
                         useCORS: true,
                         allowTaint: true,
                         logging: false,
@@ -4038,13 +6032,19 @@
                     
                     // Convert to high quality JPEG (better for PDF file size)
                     const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                    const imgWidth = 205; // Width in mm (matches preview)
-                    const pdfPageHeight = 290; // PDF page height in mm
+                    
+                    // Set dimensions based on format
+                    const imgWidth = currentFormat === 'deepfit' ? 210 : 205; // Width in mm
+                    const pdfPageHeight = currentFormat === 'deepfit' ? 297 : 290; // PDF page height in mm
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
                     const finalHeight = Math.min(imgHeight, pdfPageHeight);
                     
                     if (i > 0) {
-                        pdf.addPage([205, 290]);
+                        if (currentFormat === 'deepfit') {
+                            pdf.addPage('a4');
+                        } else {
+                            pdf.addPage([205, 290]);
+                        }
                     }
                     
                     pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, finalHeight, undefined, 'FAST');
