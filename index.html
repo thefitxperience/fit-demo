@@ -187,6 +187,7 @@
             page-break-after: always;
             font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
             margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .deepfit-header {
@@ -1180,17 +1181,26 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             background: white;
             overflow-y: auto;
-            overflow-x: hidden;
+            overflow-x: auto;
             padding: 0;
             position: relative;
             z-index: 1;
             height: 93%;
             max-height: calc(100vh - 200px);
+            cursor: grab;
         }
-        
+
+        #pdfContainer:active {
+            cursor: grabbing;
+        }
+
         #pdfContainer.active {
             display: block;
             animation: fadeIn 0.5s ease;
+        }
+
+        #previewPanel {
+            position: relative;
         }
 
         @keyframes fadeIn {
@@ -1861,8 +1871,7 @@
             display: flex;
         }
 
-        .format-toggle-btn,
-        .edit-btn {
+        .format-toggle-btn {
             display: none;
             padding: 0.4rem 0.85rem;
             background: linear-gradient(135deg, #5B9FA4 0%, #1B3448 100%);
@@ -1880,30 +1889,100 @@
             margin: 0;
         }
 
-        .format-toggle-btn:hover,
-        .edit-btn:hover {
+        .format-toggle-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(91, 159, 164, 0.4);
         }
 
-        .format-toggle-btn:active,
-        .edit-btn:active {
+        .format-toggle-btn:active {
             transform: translateY(0);
         }
 
-        .format-toggle-btn svg,
-        .edit-btn svg {
+        .format-toggle-btn svg {
             width: 16px;
             height: 16px;
         }
 
-        .format-toggle-btn.visible,
-        .edit-btn.visible {
+        .format-toggle-btn.visible {
             display: flex;
         }
 
-        .edit-btn.editing {
-            background: linear-gradient(135deg, #DD5546 0%, #8B2E24 100%);
+        .lang-toggle-btn {
+            display: none;
+            padding: 0.4rem 0.85rem;
+            background: linear-gradient(135deg, #58838C 0%, #2d555e 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(88, 131, 140, 0.3);
+            transition: all 0.3s ease;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+            margin: 0;
+            letter-spacing: 0.05em;
+        }
+        .lang-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 131, 140, 0.4);
+        }
+        .lang-toggle-btn:active { transform: translateY(0); }
+        .lang-toggle-btn.visible { display: flex; }
+
+        /* ── Arabic / RTL overrides ───────────────────────────────────── */
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-header-logo {
+            margin-left: 0;
+            margin-right: auto;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-header-arrow {
+            left: auto;
+            top: -152px;
+            right: 33.25px;
+            transform: scaleX(-1);
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-meal-icon {
+            left: auto;
+            right: -38px;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-meal-underline {
+            left: auto;
+            right: 0;
+            top: -143px;
+            transform: scaleX(-1);
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-table th,
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-table td {
+            text-align: right;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-footer {
+            direction: ltr;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-two-column {
+            flex-direction: row-reverse;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-guidelines-section > ol,
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-guidelines-section > ul {
+            list-style-position: inside;
+            padding-right: 0;
+            padding-left: 0;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-guidelines-section > ol {
+            list-style-type: arabic-indic;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-diet-intro {
+            font-size: 11px;
+            margin-top: 6px;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-table ul {
+            padding-right: 0;
+            padding-left: 0;
+            list-style-position: inside;
+        }
+        #deepFitCanvasContainer[dir="rtl"] .deepfit-table {
+            margin-top: 3px;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1978,7 +2057,8 @@
         <div class="main-content">
             <!-- Form Card -->
             <div class="form-card">
-                <div class="form-header">
+                <div class="form-header" style="position:relative;">
+                    <button type="button" onclick="quickTestFill()" style="position:absolute; top:0; right:0; padding:0.4rem 1.1rem; background:linear-gradient(135deg,#e8a020 0%,#b06010 100%); color:white; border:none; border-radius:20px; font-size:0.8rem; font-weight:700; cursor:pointer; letter-spacing:0.04em; box-shadow:0 2px 8px rgba(180,100,20,0.3); transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''" title="Auto-fill form with random data and go straight to the diet plan">Quick Test</button>
                     <h1 class="form-title">Body Composition Diet Simulator</h1>
                     <p class="form-subtitle">Based on real body composition logic – just like on our platform.</p>
                 </div>
@@ -2019,8 +2099,8 @@
                                 
                                 <!-- Date of Birth -->
                                 <div class="form-group">
-                                    <label for="dob">Date of Birth</label>
-                                    <input type="text" id="dob" name="dob" placeholder="DD/MM/YYYY" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" inputmode="numeric" maxlength="10">
+                                    <label for="dob">Date of Birth <span class="required">*</span></label>
+                                    <input type="text" id="dob" name="dob" placeholder="DD/MM/YYYY" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" inputmode="numeric" maxlength="10" required>
                                 </div>
                                 
                                 <!-- Gender -->
@@ -2278,18 +2358,14 @@
                 <div class="preview-header">
                     <h2 class="preview-title">Diet Plan Preview</h2>
                     <div class="preview-badges">
-                        <span class="status-badge">Personalized</span>
+                        <button class="lang-toggle-btn" id="langToggleBtn" onclick="togglePdfLang()">
+                            <span id="langBtnText">AR</span>
+                        </button>
                         <button class="format-toggle-btn" id="formatToggleBtn" onclick="toggleFormat()">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12M8 12h12m-12 5h12M4 7h.01M4 12h.01M4 17h.01"></path>
                             </svg>
-                            <span id="formatBtnText">Deep FIT</span>
-                        </button>
-                        <button class="edit-btn" id="editBtn" onclick="toggleEditMode()">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                            <span id="editBtnText">Edit</span>
+                            <span id="formatBtnText">FIT</span>
                         </button>
                         <button class="download-pdf-btn" id="downloadPdfBtn" onclick="downloadDietPlanPDF()">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2429,7 +2505,7 @@
                 </div>
 
                 <!-- PDF Canvas Container -->
-                <div id="deepFitCanvasContainer" style="display: flex; flex-direction: column; gap: 20px; justify-content: flex-start; align-items: center; width: 100%; height: 100%; max-height: calc(100vh - 190px); overflow-y: auto; overflow-x: hidden; background: #f5f5f5; border-radius: 16px; padding: 2rem;">
+                <div id="deepFitCanvasContainer" style="display: flex; flex-direction: column; gap: 20px; justify-content: flex-start; align-items: center; width: 100%; background: #f5f5f5; padding: 20px 0;">
                     
                     <!-- Page 1: Cover/Breakfast -->
                     <div class="deepfit-page">
@@ -2467,7 +2543,7 @@
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 36%;">Options</th>
+                                        <th style="width: 36%;">Options <span style="color: #58838C;">( ~400 kcal)</span></th>
                                         <th style="width: 34%;">Ingredients</th>
                                         <th style="width: 30%;">Nutritional Benefits</th>
                                     </tr>
@@ -2491,7 +2567,6 @@
                                                 <li>Protein: 13 g</li>
                                                 <li>Carbs: 42 g</li>
                                                 <li>Fats: 21 g</li>
-                                                <li><strong>Calories: 400 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2512,7 +2587,6 @@
                                                 <li>Protein: 28 g</li>
                                                 <li>Carbohydrates: 43 g</li>
                                                 <li>Fats: 11 g</li>
-                                                <li><strong>Calories: 373 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2534,7 +2608,6 @@
                                                 <li>Protein: 14g</li>
                                                 <li>Carbs: 32g</li>
                                                 <li>Fats: 19g</li>
-                                                <li><strong>Calories: 350 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2556,7 +2629,6 @@
                                                 <li>Protein 30 g</li>
                                                 <li>Carbs 42 g</li>
                                                 <li>Fats 15 g</li>
-                                                <li><strong>Calories: 420 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2578,7 +2650,6 @@
                                                 <li>Protein 26 g</li>
                                                 <li>Carbs 45 g</li>
                                                 <li>Fats 12 g</li>
-                                                <li><strong>Calories: 390 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2600,7 +2671,6 @@
                                                 <li>Protein 25 g</li>
                                                 <li>Carbs 44 g</li>
                                                 <li>Fats 10 g</li>
-                                                <li><strong>Calories: 380 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2622,7 +2692,6 @@
                                                 <li>Protein 18 g</li>
                                                 <li>Carbs 40 g</li>
                                                 <li>Fats 22 g</li>
-                                                <li><strong>Calories: 420 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2670,7 +2739,7 @@
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 35%;">Options <span style="color: #58838C;">( ~490 kcal)</span></th>
                                         <th style="width: 38%;">Ingredients</th>
                                         <th style="width: 27%;">Nutritional Benefits</th>
                                     </tr>
@@ -2696,7 +2765,6 @@
                                                 <li>Protein: 40 g</li>
                                                 <li>Carbohydrates: 38 g</li>
                                                 <li>Fats: 14 g</li>
-                                                <li><strong>Calories: 480 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2718,7 +2786,6 @@
                                                 <li>Protein: 42 g</li>
                                                 <li>Carbohydrates: 35 g</li>
                                                 <li>Fats: 22 g</li>
-                                                <li><strong>Calories: 540 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2741,7 +2808,6 @@
                                                 <li>Protein: 38 g</li>
                                                 <li>Carbohydrates: 42 g</li>
                                                 <li>Fats: 12 g</li>
-                                                <li><strong>Calories: 460 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2763,7 +2829,6 @@
                                                 <li>Protein: 35 g</li>
                                                 <li>Carbohydrates: 38 g</li>
                                                 <li>Fats: 18 g</li>
-                                                <li><strong>Calories: 510 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2785,7 +2850,6 @@
                                                 <li>Protein: 36 g</li>
                                                 <li>Carbohydrates: 42 g</li>
                                                 <li>Fats: 10 g</li>
-                                                <li><strong>Calories: 460 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2808,7 +2872,6 @@
                                                 <li>Protein: 38 g</li>
                                                 <li>Carbohydrates: 45 g</li>
                                                 <li>Fats: 14 g</li>
-                                                <li><strong>Calories: 490 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2830,7 +2893,6 @@
                                                 <li>Protein: 34 g</li>
                                                 <li>Carbohydrates: 44 g</li>
                                                 <li>Fats: 18 g</li>
-                                                <li><strong>Calories: 500 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2878,7 +2940,7 @@
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 38%;">Options</th>
+                                        <th style="width: 38%;">Options <span style="color: #58838C;">( ~350 kcal)</span></th>
                                         <th style="width: 33%;">Ingredients</th>
                                         <th style="width: 29%;">Nutritional Benefits</th>
                                     </tr>
@@ -2902,7 +2964,6 @@
                                                 <li>Protein: 36 g</li>
                                                 <li>Carbohydrates: 14 g</li>
                                                 <li>Fats: 21 g</li>
-                                                <li><strong>Calories: 400 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2924,7 +2985,6 @@
                                                 <li>Protein: 42 g</li>
                                                 <li>Carbohydrates: 16 g</li>
                                                 <li>Fats: 9 g</li>
-                                                <li><strong>Calories: 330 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2946,7 +3006,6 @@
                                                 <li>Protein: 40 g</li>
                                                 <li>Carbohydrates: 6 g</li>
                                                 <li>Fats: 7 g</li>
-                                                <li><strong>Calories: 280 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -2967,7 +3026,6 @@
                                                 <li>Protein: 38 g</li>
                                                 <li>Carbohydrates: 10 g</li>
                                                 <li>Fats: 16 g</li>
-                                                <li><strong>Calories: 360 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -3006,7 +3064,7 @@
                                 <img src="assets/deep-fit/Snack.png" class="deepfit-meal-icon" alt="Snack">
                                 <div class="deepfit-meal-header-content">
                                     <div class="deepfit-meal-title-row">
-                                        <div class="deepfit-meal-title">SNACKS</div>
+                                        <div class="deepfit-meal-title">SNACK <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
                                     </div>
                                     <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
                                 </div>
@@ -3015,7 +3073,7 @@
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 35%;">Options <span style="color: #58838C;">( ~220 kcal)</span></th>
                                         <th style="width: 38%;">Ingredients</th>
                                         <th style="width: 27%;">Nutritional Benefits</th>
                                     </tr>
@@ -3037,7 +3095,6 @@
                                                 <li>Protein: 6 g</li>
                                                 <li>Carbohydrates: 30 g</li>
                                                 <li>Fats: 10 g</li>
-                                                <li><strong>Calories: 230 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -3057,7 +3114,6 @@
                                                 <li>Protein: 10 g</li>
                                                 <li>Carbohydrates: 28 g</li>
                                                 <li>Fats: 5 g</li>
-                                                <li><strong>Calories: 210 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -3077,7 +3133,6 @@
                                                 <li>Protein: 6 g</li>
                                                 <li>Carbohydrates: 28 g</li>
                                                 <li>Fats: 10 g</li>
-                                                <li><strong>Calories: 220 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -3097,7 +3152,6 @@
                                                 <li>Protein: 8 g</li>
                                                 <li>Carbohydrates: 26 g</li>
                                                 <li>Fats: 12 g</li>
-                                                <li><strong>Calories: 240 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -3117,7 +3171,6 @@
                                                 <li>Protein: 9 g</li>
                                                 <li>Carbohydrates: 26 g</li>
                                                 <li>Fats: 4 g</li>
-                                                <li><strong>Calories: 200 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -3137,7 +3190,6 @@
                                                 <li>Protein: 24 g</li>
                                                 <li>Carbohydrates: 18 g</li>
                                                 <li>Fats: 5 g</li>
-                                                <li><strong>Calories: 210 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -3157,7 +3209,6 @@
                                                 <li>Protein: 10 g</li>
                                                 <li>Carbohydrates: 22 g</li>
                                                 <li>Fats: 14 g</li>
-                                                <li><strong>Calories: 240 kcal</strong></li>
                                             </ul>
                                         </td>
                                     </tr>
@@ -3430,7 +3481,7 @@
             const headerBrandName = document.getElementById('headerBrandName');
             
             // Update header text
-            headerBrandName.textContent = 'PDF Builder';
+            headerBrandName.textContent = 'New PDF Example';
             
             // Fade out selection page
             selectionPage.classList.add('fade-out');
@@ -3511,6 +3562,81 @@
                 }, 400);
             }, 400);
         }
+
+        // ── Quick Test Mode ────────────────────────────────────────────────
+        // Randomly autofills the entire nutriFIT survey and submits it,
+        // so dietitians can QC diet plans without manually entering data.
+        async function quickTestFill() {
+            // Random helpers
+            const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+            const rand = (min, max, dec = 1) => parseFloat((Math.random() * (max - min) + min).toFixed(dec));
+
+            // ── Step 1 fields ───────────────────────────────────────────────
+            document.getElementById('firstName').value = 'Test';
+            document.getElementById('lastName').value  = 'Client';
+
+            // Random DOB (age 20–50)
+            const age    = Math.floor(Math.random() * 30) + 20;
+            const today  = new Date();
+            const year   = today.getFullYear() - age;
+            const month  = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+            const day    = String(Math.floor(Math.random() * 28) + 1).padStart(2, '0');
+            document.getElementById('dob').value = `${day}/${month}/${year}`;
+
+            // Gender
+            const gender = pick(['male', 'female']);
+            document.getElementById(gender).checked = true;
+
+            // Activity level — pick first available option
+            const activitySelect = document.getElementById('activity');
+            const activityOptions = [...activitySelect.options].filter(o => o.value);
+            if (activityOptions.length) activitySelect.value = pick(activityOptions).value;
+
+            // Dietary type — pick first available option
+            const dietTypeSelect = document.getElementById('dietType');
+            const dietOptions = [...dietTypeSelect.options].filter(o => o.value);
+            if (dietOptions.length) dietTypeSelect.value = pick(dietOptions).value;
+            dietTypeSelect.dispatchEvent(new Event('change'));
+
+            // Diet plan style
+            document.getElementById(pick(['normal', 'if'])).checked = true;
+
+            // Goal
+            document.getElementById(pick(['maintain', 'lose', 'gain'])).checked = true;
+
+            // ── Step 2 fields ───────────────────────────────────────────────
+            const isMale  = gender === 'male';
+            const weight  = rand(isMale ? 65 : 50, isMale ? 100 : 80);
+            const height  = rand(isMale ? 165 : 155, isMale ? 190 : 175);
+            const fatPct  = rand(isMale ? 12 : 18, isMale ? 28 : 35);
+            const fatMass = parseFloat((weight * fatPct / 100).toFixed(1));
+            const lbm     = parseFloat((weight - fatMass).toFixed(1));
+            const muscle  = parseFloat((lbm * rand(0.45, 0.55)).toFixed(1));
+            const bmr     = Math.round(isMale
+                ? 88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)
+                : 447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age));
+
+            document.getElementById('height').value = height;
+            document.getElementById('weight').value = weight;
+            document.getElementById('muscle').value = muscle;
+            document.getElementById('fat').value    = fatMass;
+            document.getElementById('lbm').value    = lbm;
+            document.getElementById('bmr').value    = bmr;
+            document.getElementById('bmr').dispatchEvent(new Event('input'));
+            // Let calculateCalories run first, then set calories
+            await new Promise(r => setTimeout(r, 50));
+            const autoCalories = document.getElementById('calories').value;
+            if (!autoCalories) document.getElementById('calories').value = Math.round(bmr * 1.3);
+
+            // ── Step 3 — clear all medical/allergies, let the user choose ────
+            document.querySelectorAll('#medicalConditionsCheckboxes input[type="checkbox"], #allergiesCheckboxes input[type="checkbox"]')
+                .forEach(cb => cb.checked = false);
+
+            // ── Navigate to step 3 and let the user review & submit ──────────
+            currentStep = 3;
+            updateStepDisplay();
+        }
+        // ── End Quick Test Mode ────────────────────────────────────────────
 
         function selectMuscleFIT() {
             const selectionPage = document.getElementById('selectionPage');
@@ -4497,6 +4623,96 @@
         const loadingState = document.getElementById('loadingState');
         const pdfContainer = document.getElementById('pdfContainer');
         const loadingMessageEl = document.getElementById('loadingMessage');
+
+        // PDF Zoom & Pan
+        let pdfZoom = 1;
+        let pdfIsPanning = false;
+        let pdfStartX, pdfStartY, pdfScrollLeft, pdfScrollTop;
+
+        function applyPdfZoom(newZoom, originX, originY) {
+            newZoom = Math.min(Math.max(1, newZoom), 4);
+            if (newZoom === pdfZoom) return;
+            const inner = pdfContainer.querySelector('#deepFitCanvasContainer, .diet-plan-container');
+            if (!inner) return;
+
+            // Anchor: find the content point under the cursor before zoom
+            const imgPointX = (pdfContainer.scrollLeft + originX) / pdfZoom;
+            const imgPointY = (pdfContainer.scrollTop  + originY) / pdfZoom;
+
+            pdfZoom = newZoom;
+
+            // CSS zoom expands layout — element takes up zoom×its natural size.
+            // We must ensure the inner div is NOT width:100% (that would prevent horizontal growth).
+            inner.style.cssText = inner.style.cssText
+                .replace(/overflow[^;]+;/g, '')
+                .replace(/max-height[^;]+;/g, '')
+                .replace(/height[^;]+;/g, '');
+            inner.style.width = 'fit-content';
+            inner.style.minWidth = '100%';
+            inner.style.zoom = pdfZoom;
+
+            requestAnimationFrame(() => {
+                pdfContainer.scrollLeft = (imgPointX * pdfZoom) - originX;
+                pdfContainer.scrollTop  = (imgPointY * pdfZoom) - originY;
+            });
+        }
+
+        pdfContainer.addEventListener('wheel', (e) => {
+            if (!e.ctrlKey) return;
+            e.preventDefault();
+            const rect = pdfContainer.getBoundingClientRect();
+            applyPdfZoom(pdfZoom + (e.deltaY > 0 ? -0.15 : 0.15), e.clientX - rect.left, e.clientY - rect.top);
+        }, { passive: false });
+
+        pdfContainer.addEventListener('mousedown', (e) => {
+            if (pdfZoom <= 1) return;
+            pdfIsPanning = true;
+            pdfContainer.style.cursor = 'grabbing';
+            pdfStartX = e.pageX - pdfContainer.offsetLeft;
+            pdfStartY = e.pageY - pdfContainer.offsetTop;
+            pdfScrollLeft = pdfContainer.scrollLeft;
+            pdfScrollTop = pdfContainer.scrollTop;
+        });
+
+        pdfContainer.addEventListener('mouseleave', () => { pdfIsPanning = false; pdfContainer.style.cursor = 'grab'; });
+        pdfContainer.addEventListener('mouseup', () => { pdfIsPanning = false; pdfContainer.style.cursor = 'grab'; });
+        pdfContainer.addEventListener('mousemove', (e) => {
+            if (!pdfIsPanning) return;
+            e.preventDefault();
+            pdfContainer.scrollLeft = pdfScrollLeft - (e.pageX - pdfContainer.offsetLeft - pdfStartX) * 2;
+            pdfContainer.scrollTop = pdfScrollTop - (e.pageY - pdfContainer.offsetTop - pdfStartY) * 2;
+        });
+
+        // Touch pinch-to-zoom
+        let pdfTouchDist = 0, pdfTouchCX = 0, pdfTouchCY = 0;
+        pdfContainer.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+                pdfTouchDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                const rect = pdfContainer.getBoundingClientRect();
+                pdfTouchCX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
+                pdfTouchCY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - rect.top;
+            }
+        }, { passive: true });
+        pdfContainer.addEventListener('touchmove', (e) => {
+            if (e.touches.length !== 2) return;
+            e.preventDefault();
+            const dist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+            applyPdfZoom(pdfZoom + (dist - pdfTouchDist) * 0.01, pdfTouchCX, pdfTouchCY);
+            pdfTouchDist = dist;
+        }, { passive: false });
+
+        // Reset zoom when new plan is generated
+        function resetPdfZoom() {
+            const inner = pdfContainer.querySelector('#deepFitCanvasContainer, .diet-plan-container');
+            if (inner) {
+                inner.style.zoom = '';
+                inner.style.width = '';
+                inner.style.minWidth = '';
+            }
+            pdfZoom = 1;
+            pdfContainer.scrollTop = 0;
+            pdfContainer.scrollLeft = 0;
+        }
         const bmrInput = document.getElementById('bmr');
         const activityInput = document.getElementById('activity');
         const caloriesInput = document.getElementById('calories');
@@ -4800,7 +5016,11 @@
             
             // Validate DOB if present in current step
             const dobInput = currentStepContent.querySelector('#dob');
-            if (dobInput && dobInput.value) {
+            if (dobInput && !dobInput.value) {
+                const label = currentStepContent.querySelector('label[for="dob"]');
+                if (label) label.style.color = '#dc2626';
+                if (!hasError) { dobInput.focus(); hasError = true; }
+            } else if (dobInput && dobInput.value) {
                 const dobValue = dobInput.value;
                 const dobPattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
                 const match = dobValue.match(dobPattern);
@@ -4971,6 +5191,29 @@
                 kilocalorieNeeded: parseFloat(document.getElementById('calories').value) || 0,
                 secondaryTypeId: document.querySelector('input[name="dietPlan"]:checked').value
             };
+            
+            // Add dateOfBirth in YYYY-MM-DD format for v3 API
+            const dobValue = document.getElementById('dob').value;
+            if (dobValue) {
+                const dobParts = dobValue.split('/');
+                if (dobParts.length === 3) {
+                    formData.dateOfBirth = `${dobParts[2]}-${dobParts[1]}-${dobParts[0]}`; // Convert DD/MM/YYYY to YYYY-MM-DD
+                }
+            }
+            
+            // Calculate and add age
+            if (formData.dateOfBirth) {
+                const birthDate = new Date(formData.dateOfBirth);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                formData.age = age;
+            } else {
+                formData.age = 0;
+            }
 
             console.log('Request payload:', JSON.stringify(formData, null, 2));
 
@@ -5009,7 +5252,7 @@
 
             try {
                 // Send data to API
-                const response = await fetch(`${API_CONFIG.baseUrl}/generate`, {
+                const response = await fetch(`${API_CONFIG.baseUrl}/v3/generate`, {
                     method: 'POST',
                     headers: API_CONFIG.headers,
                     body: JSON.stringify(formData)
@@ -5138,6 +5381,7 @@
             
             clearInterval(messageInterval);
             loadingState.style.display = 'none';
+            resetPdfZoom();
             pdfContainer.classList.add('active');
             
             // Store data globally
@@ -5149,25 +5393,180 @@
             } else {
                 generateHTMLDietPlan(data);
             }
+            requestAnimationFrame(() => {
+                pdfContainer.scrollTop = 0;
+                pdfContainer.scrollLeft = 0;
+            });
             
-            // Show download, format toggle, and edit buttons
+            // Show download and format toggle buttons
             const downloadBtn = document.getElementById('downloadPdfBtn');
             const formatToggleBtn = document.getElementById('formatToggleBtn');
-            const editBtn = document.getElementById('editBtn');
             if (downloadBtn) {
                 downloadBtn.classList.add('visible');
             }
             if (formatToggleBtn) {
                 formatToggleBtn.classList.add('visible');
             }
-            if (editBtn) {
-                editBtn.classList.add('visible');
+            const langToggleBtn = document.getElementById('langToggleBtn');
+            if (langToggleBtn && currentFormat === 'deepfit') {
+                langToggleBtn.classList.add('visible');
             }
         }
         
-        let isEditMode = false;
-        let currentFormat = 'nutrifit'; // 'nutrifit' or 'deepfit'
-        
+        let currentFormat = 'deepfit'; // 'nutrifit' or 'deepfit'
+        let pdfLang = 'en';
+        window.arTranslations = null;
+        fetch('./assets/translations-ar.json')
+            .then(r => r.json())
+            .then(data => { window.arTranslations = data; })
+            .catch(() => {});
+
+        function togglePdfLang() {
+            pdfLang = pdfLang === 'en' ? 'ar' : 'en';
+            const btn = document.getElementById('langToggleBtn');
+            if (btn) btn.querySelector('#langBtnText').textContent = pdfLang === 'ar' ? 'EN' : 'AR';
+            if (window.currentDietPlan && currentFormat === 'deepfit') {
+                generateDeepFITDietPlan(window.currentDietPlan);
+                requestAnimationFrame(() => {
+                    pdfContainer.scrollTop = 0;
+                    pdfContainer.scrollLeft = 0;
+                });
+            }
+        }
+
+        function applyPdfTranslations(container) {
+            if (pdfLang !== 'ar' || !window.arTranslations) return;
+            const UI   = window.arTranslations.ui          || {};
+            const FOOD = window.arTranslations.food        || {};
+            const ING  = window.arTranslations.ingredients || {};
+
+            // RTL + Arabic-friendly font
+            const inner = container.querySelector('#deepFitCanvasContainer');
+            if (inner) {
+                inner.setAttribute('dir', 'rtl');
+                inner.style.fontFamily = 'Tahoma, Arial, sans-serif';
+            }
+
+            // Build lookup: short structural labels safe for text-node walking
+            const lookup = {};
+            [
+                'DIET PLAN', 'Name:', 'Age:', 'Date:', 'Next Check up:', 'Daily Calories:',
+                'DIET TYPE:', 'MEAL 1: BREAKFAST', 'MEAL 1: LUNCH', 'MEAL 2: LUNCH', 'MEAL 2: DINNER', 'MEAL 3: DINNER',
+                'SNACK', '(Choose One)', 'Options', 'Ingredients', 'Nutritional Benefits',
+                'Protein: ', 'Carbs: ', 'Fats: ',
+                'No ingredients', 'No meal data available', 'No items available'
+            ].forEach(k => { if (UI[k]) lookup[k] = UI[k]; });
+            // Diet type values
+            ['Maintenance', 'Weight Loss', 'Weight Gain', 'kcal'].forEach(k => { if (UI[k]) lookup[k] = UI[k]; });
+            // API-sourced dynamic names
+            Object.entries(FOOD).forEach(([k, v]) => { if (v && !k.startsWith('_')) lookup[k] = v; });
+            Object.entries(ING).forEach(([k, v])  => { if (v && !k.startsWith('_')) lookup[k] = v; });
+
+            // Apply all exact-match class-targeted replacements BEFORE walkText
+            // so walkText's partial word substitutions don't corrupt their lookup keys.
+
+            // Descriptions
+            const DESCS = window.arTranslations.descriptions || {};
+            container.querySelectorAll('.deepfit-option-desc').forEach(el => {
+                const k = el.textContent.trim();
+                if (DESCS[k]) el.textContent = DESCS[k];
+            });
+
+            // Long intro paragraphs
+            const introEls = container.querySelectorAll('.deepfit-diet-intro');
+            if (introEls[0] && UI.diet_intro)       introEls[0].textContent = UI.diet_intro;
+            if (introEls[1] && UI.guidelines_intro) introEls[1].textContent = UI.guidelines_intro;
+
+            // Guidelines title
+            container.querySelectorAll('.deepfit-guidelines-title').forEach(el => {
+                if (UI['DAILY NUTRITION & LIFESTYLE GUIDELINES'])
+                    el.textContent = UI['DAILY NUTRITION & LIFESTYLE GUIDELINES'];
+            });
+
+            // Guidelines section headings
+            container.querySelectorAll('.deepfit-guidelines-section h3, .deepfit-guidelines-section h4').forEach(el => {
+                const k = el.textContent.trim();
+                if (UI[k]) el.textContent = UI[k];
+            });
+
+            // Guidelines paragraphs and list items
+            const PARA  = window.arTranslations.paragraphs || {};
+            const ITEMS = window.arTranslations.listItems  || {};
+            container.querySelectorAll('.deepfit-guidelines-section p').forEach(el => {
+                const k = el.textContent.trim();
+                if (PARA[k]) el.textContent = PARA[k];
+            });
+            container.querySelectorAll('.deepfit-guidelines-section li').forEach(el => {
+                const k = el.textContent.trim();
+                if (ITEMS[k]) el.textContent = ITEMS[k];
+            });
+
+            // Sort longest keys first so "Zucchini cooked" matches before "Zucchini"
+            const lookupEntries = Object.entries(lookup).sort((a, b) => b[0].length - a[0].length);
+
+            function walkText(node) {
+                if (node.nodeType === 3) {
+                    let t = node.textContent, changed = false;
+                    for (const [k, v] of lookupEntries) {
+                        if (t.includes(k)) { t = t.split(k).join(v); changed = true; }
+                    }
+                    if (changed) node.textContent = t;
+                } else if (node.nodeType === 1 && !['SCRIPT', 'STYLE', 'IMG'].includes(node.tagName)) {
+                    [...node.childNodes].forEach(walkText);
+                }
+            }
+            walkText(container);
+
+            // Convert Western numerals → Arabic-Indic, unit 'g' → 'غرام'
+            function toArabicNums(str) {
+                return str.replace(/ g\b/g, ' غرام').replace(/kcal/g, 'كيلو سعرة').replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+            }
+            // Info row: Age, Date, Daily Calories
+            container.querySelectorAll('.deepfit-info-row div').forEach(el => {
+                el.childNodes.forEach(node => {
+                    if (node.nodeType === 3) node.textContent = toArabicNums(node.textContent);
+                });
+            });
+            // Table ingredient + macro list items
+            container.querySelectorAll('.deepfit-table li').forEach(el => {
+                el.textContent = toArabicNums(el.textContent);
+            });
+            // Table header kcal spans
+            container.querySelectorAll('.deepfit-table th span').forEach(el => {
+                el.textContent = toArabicNums(el.textContent);
+            });
+            // Guidelines pages — paragraphs and list items with numbers
+            container.querySelectorAll('.deepfit-guidelines-section p, .deepfit-guidelines-section li').forEach(el => {
+                el.textContent = toArabicNums(el.textContent);
+            });
+
+            // Inline Arabic ordinal numbers into <ol> items so html2canvas captures them
+            // (html2canvas does not support list-style-type: arabic-indic)
+            const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
+            function toArabicOrdinal(n) {
+                return String(n).replace(/[0-9]/g, d => arabicDigits[d]);
+            }
+            container.querySelectorAll('.deepfit-guidelines-section > ol').forEach(ol => {
+                ol.style.listStyle = 'none';
+                ol.style.paddingRight = '0';
+                ol.style.paddingLeft = '0';
+                [...ol.querySelectorAll('li')].forEach((li, idx) => {
+                    li.textContent = toArabicOrdinal(idx + 1) + '. ' + li.textContent;
+                });
+            });
+
+            // Inline bullet character into table <ul> items so html2canvas renders
+            // them on the right side (it ignores list-style direction)
+            container.querySelectorAll('.deepfit-table ul').forEach(ul => {
+                ul.style.listStyle = 'none';
+                ul.style.padding = '0';
+                ul.style.margin = '0';
+                ul.querySelectorAll('li').forEach(li => {
+                    li.textContent = '• ' + li.textContent;
+                });
+            });
+        }
+
         function toggleFormat() {
             // Toggle between formats
             currentFormat = currentFormat === 'nutrifit' ? 'deepfit' : 'nutrifit';
@@ -5179,44 +5578,26 @@
                 formatBtnText.textContent = currentFormat === 'nutrifit' ? 'Deep FIT' : 'FIT';
             }
             
+            // Show/hide lang toggle based on format
+            const langBtn = document.getElementById('langToggleBtn');
+            if (currentFormat === 'deepfit') {
+                if (langBtn) langBtn.classList.add('visible');
+            } else {
+                pdfLang = 'en';
+                if (langBtn) {
+                    langBtn.classList.remove('visible');
+                    langBtn.querySelector('#langBtnText').textContent = 'AR';
+                }
+            }
+
             // Regenerate the plan with new format
+            resetPdfZoom();
             if (window.currentDietPlan) {
                 if (currentFormat === 'deepfit') {
                     generateDeepFITDietPlan(window.currentDietPlan);
                 } else {
                     generateHTMLDietPlan(window.currentDietPlan);
                 }
-            }
-        }
-        
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            const editBtn = document.getElementById('editBtn');
-            const editBtnText = document.getElementById('editBtnText');
-            const pdfContainer = document.getElementById('pdfContainer');
-            
-            if (isEditMode) {
-                // Enable editing
-                editBtn.classList.add('editing');
-                editBtnText.textContent = 'Done';
-                
-                // Make all diet plan content editable
-                const editableElements = pdfContainer.querySelectorAll(
-                    '.info-value, .diet-type-value, .meal-heading, .food-name, .food-item, .recommendation-item'
-                );
-                editableElements.forEach(el => {
-                    el.setAttribute('contenteditable', 'true');
-                });
-            } else {
-                // Disable editing
-                editBtn.classList.remove('editing');
-                editBtnText.textContent = 'Edit';
-                
-                // Remove contenteditable from all elements
-                const editableElements = pdfContainer.querySelectorAll('[contenteditable="true"]');
-                editableElements.forEach(el => {
-                    el.removeAttribute('contenteditable');
-                });
             }
         }
         
@@ -5252,6 +5633,26 @@
             // Get diet type
             const dietType = apiResponse.goalText || '';
             
+            // Helper to get the representative calorie value for a meal type (first item's value)
+            function getMealCalories(mealData) {
+                if (!mealData) return null;
+                for (const groupId in mealData) {
+                    const classifications = mealData[groupId];
+                    for (const classification in classifications) {
+                        const items = classifications[classification];
+                        if (Array.isArray(items) && items.length > 0 && items[0].kilocaloriePerServe) {
+                            return Math.round(items[0].kilocaloriePerServe);
+                        }
+                    }
+                }
+                return null;
+            }
+
+            const breakfastCal = getMealCalories(foodData['Breakfast']);
+            const lunchCal = getMealCalories(foodData['Lunch']);
+            const dinnerCal = getMealCalories(foodData['Dinner']);
+            const snackCal = getMealCalories(foodData['Snack']);
+
             // Helper function to generate meal rows
             function generateMealRows(mealData) {
                 console.log('generateMealRows received:', mealData);
@@ -5261,7 +5662,7 @@
                 let rowCount = 0;
                 const maxRows = 7;
                 
-                // Iterate through groups (HealthyFat, Vegetables, LeanProtein, etc.)
+                // Iterate through groups (100000, HealthyFat, LeanProtein, etc.)
                 for (const groupId in mealData) {
                     if (rowCount >= maxRows) break;
                     
@@ -5280,24 +5681,59 @@
                                 if (rowCount >= maxRows) return;
                                 
                                 const foodName = item.foodDishName || '';
-                                const calories = item.kilocaloriePerServe || item.kcal || item.calories || 0;
+                                
+                                const calories = item.kilocaloriePerServe || 0;
+                                
+                                // Build ingredients list
+                                let ingredientsList = '';
+                                if (item.ingredientList && Array.isArray(item.ingredientList)) {
+                                    // Sort ingredients by quantity (highest to lowest)
+                                    const sortedIngredients = [...item.ingredientList].sort((a, b) => b.quantity - a.quantity);
+                                    
+                                    ingredientsList = sortedIngredients.map(ing => {
+                                        return `<li>${ing.ingredientName}: ${ing.quantity} ${ing.quantityUomId === 'WT_g' ? 'g' : ing.quantityUomId}</li>`;
+                                    }).join('');
+                                }
+                                if (!ingredientsList) {
+                                    ingredientsList = '<li>No ingredients</li>';
+                                }
+                                
+                                // Build macros list
+                                let macrosList = '';
+                                if (item.macronutrientList && Array.isArray(item.macronutrientList)) {
+                                    const macros = {};
+                                    item.macronutrientList.forEach(macro => {
+                                        if (macro.macronutrientId === 'Protein') macros.protein = macro.quantityPerServe;
+                                        if (macro.macronutrientId === 'Carbohydrates') macros.carbs = macro.quantityPerServe;
+                                        if (macro.macronutrientId === 'Healthy_Fats') macros.fats = macro.quantityPerServe;
+                                    });
+                                    macrosList = `
+                                        <li>Protein: ${macros.protein || '-'} g</li>
+                                        <li>Carbs: ${macros.carbs || '-'} g</li>
+                                        <li>Fats: ${macros.fats || '-'} g</li>
+                                    `;
+                                } else {
+                                    macrosList = `
+                                        <li>Protein: -</li>
+                                        <li>Carbs: -</li>
+                                        <li>Fats: -</li>
+                                    `;
+                                }
                                 
                                 rows += `
                                     <tr>
                                         <td>
                                             <span class="deepfit-option-name">${foodName}</span>
+                                            ${item.description ? `<span class="deepfit-option-desc">${item.description}</span>` : ''}
                                         </td>
                                         <td>
                                             <ul>
-                                                <li>No ingredients</li>
+                                                ${ingredientsList}
                                             </ul>
                                         </td>
                                         <td>
                                             <ul>
-                                                <li>Protein: -</li>
-                                                <li>Carbs: -</li>
-                                                <li>Fats: -</li>
-                                                <li><strong>Calories: ${calories} kcal</strong></li>
+                                                ${macrosList}
                                             </ul>
                                         </td>
                                     </tr>
@@ -5310,10 +5746,66 @@
                 
                 return rows || '<tr><td colspan="3" style="text-align: center;">No items available</td></tr>';
             }
-            
+
+            // Detect intermittent fasting (no breakfast data)
+            const hasBreakfast = foodData['Breakfast'] && Object.keys(foodData['Breakfast']).length > 0;
+            const isIF = !hasBreakfast;
+
+            // Pre-build the Lunch page — only included for regular plans, omitted for IF
+            // (for IF, Lunch appears on page 1 instead)
+            const lunchPage2HTML = isIF ? '' : `
+                    <!-- Page 2 (regular only): Lunch -->
+                    <div class="deepfit-page">
+                        <div class="deepfit-header">
+                            <div class="deepfit-header-title">DIET PLAN</div>
+                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
+                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
+                        </div>
+                        <div class="deepfit-content deepfit-meal-page">
+                            <div class="deepfit-meal-header">
+                                <img src="assets/deep-fit/Lunch.png" class="deepfit-meal-icon" alt="Lunch">
+                                <div class="deepfit-meal-header-content">
+                                    <div class="deepfit-meal-title-row">
+                                        <div class="deepfit-meal-title">MEAL 2: LUNCH <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                    </div>
+                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
+                                </div>
+                            </div>
+                            <table class="deepfit-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%;">Options ${lunchCal ? `<span style="color: #58838C;">( ~${lunchCal} kcal)</span>` : ''}</th>
+                                        <th style="width: 38%;">Ingredients</th>
+                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${generateMealRows(foodData['Lunch'])}
+                                </tbody>
+                            </table>
+                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
+                                <path d="M0,280 Q250,180 500,280 L500,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <div class="deepfit-footer">
+                            <div class="deepfit-footer-left">
+                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
+                                <div class="deepfit-footer-left-content">
+                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
+                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
+                                    <span>mydeepfit</span>
+                                </div>
+                            </div>
+                            <div class="deepfit-footer-right">
+                                <span>www.mydeepfit.com</span>
+                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
+                            </div>
+                        </div>
+                    </div>`;
+
             // Generate the HTML
             pdfContainer.innerHTML = `
-                <div id="deepFitCanvasContainer" style="display: flex; flex-direction: column; gap: 20px; justify-content: flex-start; align-items: center; width: 100%; height: 100%; max-height: calc(100vh - 190px); overflow-y: auto; overflow-x: hidden; background: #f5f5f5; border-radius: 16px; padding: 2rem;">
+                <div id="deepFitCanvasContainer" style="display: flex; flex-direction: column; gap: 20px; justify-content: flex-start; align-items: center; width: 100%; background: #f5f5f5; padding: 20px 0;">
                     
                     <!-- Page 1: Cover/Breakfast -->
                     <div class="deepfit-page">
@@ -5339,10 +5831,10 @@
                             <div class="deepfit-diet-intro">Welcome to your personalized diet plan! This guide is designed to provide you with a structured approach to healthy eating, offering three meal options and one snack daily, ensuring you receive a balanced intake of proteins, carbohydrates, and healthy fats. Choose the options that best fit your preferences and dietary needs.</div>
                             
                             <div class="deepfit-meal-header">
-                                <img src="assets/deep-fit/Breakfast.png" class="deepfit-meal-icon" alt="Breakfast">
+                                <img src="assets/deep-fit/${isIF ? 'Lunch.png' : 'Breakfast.png'}" class="deepfit-meal-icon" alt="${isIF ? 'Lunch' : 'Breakfast'}">
                                 <div class="deepfit-meal-header-content">
                                     <div class="deepfit-meal-title-row">
-                                        <div class="deepfit-meal-title">MEAL 1: BREAKFAST <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                        <div class="deepfit-meal-title">${isIF ? 'MEAL 1: LUNCH' : 'MEAL 1: BREAKFAST'} <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
                                     </div>
                                     <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
                                 </div>
@@ -5351,13 +5843,13 @@
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 36%;">Options</th>
+                                        <th style="width: 36%;">Options ${isIF ? (lunchCal ? `<span style="color: #58838C;">( ~${lunchCal} kcal)</span>` : '') : (breakfastCal ? `<span style="color: #58838C;">( ~${breakfastCal} kcal)</span>` : '')}</th>
                                         <th style="width: 36%;">Ingredients</th>
                                         <th style="width: 28%;">Nutritional Benefits</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${generateMealRows(foodData['Breakfast'])}
+                                    ${generateMealRows(isIF ? foodData['Lunch'] : foodData['Breakfast'])}
                                 </tbody>
                             </table>
                             
@@ -5381,56 +5873,7 @@
                         </div>
                     </div>
 
-                    <!-- Page 2: Lunch -->
-                    <div class="deepfit-page">
-                        <div class="deepfit-header">
-                            <div class="deepfit-header-title">DIET PLAN</div>
-                            <img src="assets/deep-fit/Arrow.png" class="deepfit-header-arrow" alt="">
-                            <img src="assets/deep-fit/deep-fit-logo.png" class="deepfit-header-logo" alt="DEEP FIT">
-                        </div>
-                        <div class="deepfit-content deepfit-meal-page">
-                            <div class="deepfit-meal-header">
-                                <img src="assets/deep-fit/Lunch.png" class="deepfit-meal-icon" alt="Lunch">
-                                <div class="deepfit-meal-header-content">
-                                    <div class="deepfit-meal-title-row">
-                                        <div class="deepfit-meal-title">MEAL 2: LUNCH <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
-                                    </div>
-                                    <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
-                                </div>
-                            </div>
-                            
-                            <table class="deepfit-table">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 35%;">Options</th>
-                                        <th style="width: 38%;">Ingredients</th>
-                                        <th style="width: 27%;">Nutritional Benefits</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${generateMealRows(foodData['Lunch'])}
-                                </tbody>
-                            </table>
-                            
-                            <svg class="deepfit-wave" viewBox="0 0 595 400" preserveAspectRatio="none">
-                                <path d="M0,280 Q250,180 500,280 L500,400 L0,400 Z" fill="#e0e0e0" opacity="0.3"/>
-                            </svg>
-                        </div>
-                        <div class="deepfit-footer">
-                            <div class="deepfit-footer-left">
-                                <img src="assets/deep-fit/Arrow-foot-left.png" class="deepfit-footer-arrow" alt="Arrow">
-                                <div class="deepfit-footer-left-content">
-                                    <img src="assets/deep-fit/Icon-instagram.png" class="deepfit-footer-icon" alt="Instagram">
-                                    <img src="assets/deep-fit/Logo-Facebook.png" class="deepfit-footer-icon" alt="Facebook">
-                                    <span>mydeepfit</span>
-                                </div>
-                            </div>
-                            <div class="deepfit-footer-right">
-                                <span>www.mydeepfit.com</span>
-                                <img src="assets/deep-fit/Arrow-foot-right.png" class="deepfit-footer-arrow" alt="Arrow">
-                            </div>
-                        </div>
-                    </div>
+                    ${lunchPage2HTML}
 
                     <!-- Page 3: Dinner -->
                     <div class="deepfit-page">
@@ -5444,7 +5887,7 @@
                                 <img src="assets/deep-fit/Dinner.png" class="deepfit-meal-icon" alt="Dinner">
                                 <div class="deepfit-meal-header-content">
                                     <div class="deepfit-meal-title-row">
-                                        <div class="deepfit-meal-title">MEAL 3: DINNER <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                        <div class="deepfit-meal-title">${isIF ? 'MEAL 2: DINNER' : 'MEAL 3: DINNER'} <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
                                     </div>
                                     <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
                                 </div>
@@ -5453,7 +5896,7 @@
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 35%;">Options ${dinnerCal ? `<span style="color: #58838C;">( ~${dinnerCal} kcal)</span>` : ''}</th>
                                         <th style="width: 38%;">Ingredients</th>
                                         <th style="width: 27%;">Nutritional Benefits</th>
                                     </tr>
@@ -5495,7 +5938,7 @@
                                 <img src="assets/deep-fit/Snack.png" class="deepfit-meal-icon" alt="Snack">
                                 <div class="deepfit-meal-header-content">
                                     <div class="deepfit-meal-title-row">
-                                        <div class="deepfit-meal-title">SNACKS</div>
+                                        <div class="deepfit-meal-title">SNACK <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
                                     </div>
                                     <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
                                 </div>
@@ -5504,7 +5947,7 @@
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 35%;">Options</th>
+                                        <th style="width: 35%;">Options ${snackCal ? `<span style="color: #58838C;">( ~${snackCal} kcal)</span>` : ''}</th>
                                         <th style="width: 38%;">Ingredients</th>
                                         <th style="width: 27%;">Nutritional Benefits</th>
                                     </tr>
@@ -5715,6 +6158,7 @@
                     
                 </div>
             `;
+            applyPdfTranslations(pdfContainer);
         }
         
         function generateHTMLDietPlan(apiResponse) {
