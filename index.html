@@ -3743,8 +3743,28 @@
         }
 
         // API Configuration
+        // ── Environment detection ──────────────────────────────────────────
+        // On GitHub Pages (or any remote HTTPS host) the direct HTTP API is
+        // blocked by the browser. A Cloudflare Worker proxy sits in between,
+        // receives the request over HTTPS, then forwards it to the API server.
+        //
+        // After deploying cloudflare-worker/worker.js, replace the URL below
+        // with your actual worker URL, e.g.:
+        //   https://fit-proxy.thefitxperience.workers.dev
+        const WORKER_BASE_URL = 'https://fit-proxy.thefitxperience.workers.dev';
+        const DIRECT_BASE_URL = 'http://185.143.103.106:8080';
+
+        const isGitHubPages = window.location.hostname.endsWith('github.io');
+        const isLocal       = window.location.hostname === 'localhost' ||
+                              window.location.hostname === '127.0.0.1' ||
+                              window.location.protocol === 'file:';
+
+        const API_BASE = (isGitHubPages || (!isLocal))
+            ? WORKER_BASE_URL
+            : DIRECT_BASE_URL;
+
         const API_CONFIG = {
-            baseUrl: 'http://185.143.103.106:8080/rest/s1/fit/dietPlan',
+            baseUrl: API_BASE + '/rest/s1/fit/dietPlan',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Basic ' + btoa('fit:Fit@2024')
