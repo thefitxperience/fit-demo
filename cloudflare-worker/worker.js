@@ -15,7 +15,9 @@
  *   Worker calls:   http://185.143.103.106:8080/rest/s1/fit/dietPlan/v3/generate
  */
 
-const API_ORIGIN = "http://185.143.103.106:8080";
+// Cloudflare Workers cannot connect to bare IP addresses (error 1003).
+// Use the reverse-DNS hostname that resolves to the same server.
+const API_ORIGIN = "http://ov-9a74e5.infomaniak.ch:8080";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
