@@ -2159,15 +2159,15 @@
                             <div class="radio-group" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
                                 <div class="radio-option">
                                     <input type="radio" id="maintain" name="goal" value="maintain" required>
-                                    <label for="maintain">Maintenance</label>
+                                    <label for="maintain">Stay Balanced</label>
                                 </div>
                                 <div class="radio-option">
                                     <input type="radio" id="lose" name="goal" value="lose" required>
-                                    <label for="lose">Weight Loss</label>
+                                    <label for="lose">Lean Down</label>
                                 </div>
                                 <div class="radio-option">
                                     <input type="radio" id="gain" name="goal" value="gain" required>
-                                    <label for="gain">Weight Gain</label>
+                                    <label for="gain">Build Up</label>
                                 </div>
                             </div>
                         </div>
@@ -3743,14 +3743,7 @@
         }
 
         // API Configuration
-        // ── Environment detection ──────────────────────────────────────────
-        // On GitHub Pages (or any remote HTTPS host) the direct HTTP API is
-        // blocked by the browser. A Cloudflare Worker proxy sits in between,
-        // receives the request over HTTPS, then forwards it to the API server.
-        //
-        // After deploying cloudflare-worker/worker.js, replace the URL below
-        // with your actual worker URL, e.g.:
-        //   https://fit-proxy.thefitxperience.workers.dev
+        // Cloudflare Worker proxy 
         const WORKER_BASE_URL = 'https://fit-proxy.andyayas27.workers.dev';
         const DIRECT_BASE_URL = 'http://185.143.103.106:8080';
 
@@ -3888,12 +3881,40 @@
                 'active': 1.75,
             };
             
+            const activityDisplayNames = {
+                'highly active': 'Peak Performance (Hard exercise, sports, or physically demanding activity 6–7 days per week)',
+                'extra active': 'Peak Performance (Hard exercise, sports, or physically demanding activity 6–7 days per week)',
+                'very active': 'Committed Intense (Exercise 5–6 days per week)',
+                'moderately active': 'Consistent Moderate (Exercise 3–4 days per week)',
+                'moderate': 'Consistent Moderate (Exercise 3–4 days per week)',
+                'lightly active': 'Building Momentum (Light exercise or physical activity 1–2 days per week)',
+                'light': 'Building Momentum (Light exercise or physical activity 1–2 days per week)',
+                'sedentary': 'Getting Started (Very little or no exercise)',
+            };
+            function getActivityDisplayName(description) {
+                const desc = description.toLowerCase();
+                for (const [key, label] of Object.entries(activityDisplayNames)) {
+                    if (desc.includes(key)) return label;
+                }
+                return description;
+            }
+
+            const activitySortOrder = ['sedentary', 'light', 'lightly active', 'moderate', 'moderately active', 'very active', 'highly active', 'extra active'];
+            function getActivitySortIndex(description) {
+                const desc = description.toLowerCase();
+                const idx = activitySortOrder.findIndex(key => desc.includes(key));
+                return idx === -1 ? 999 : idx;
+            }
+            const sortedActivities = [...apiData.activities].sort((a, b) =>
+                getActivitySortIndex(a.description) - getActivitySortIndex(b.description)
+            );
+
             let extraActiveId = null;
-            
-            apiData.activities.forEach(activity => {
+
+            sortedActivities.forEach(activity => {
                 const option = document.createElement('option');
                 option.value = activity.enumId;
-                option.textContent = activity.description;
+                option.textContent = getActivityDisplayName(activity.description);
                 activitySelect.appendChild(option);
                 
                 // Map the activity ID to a multiplier based on description
@@ -3914,13 +3935,30 @@
             console.log('Activity multipliers:', activityMultipliers);
 
             // Populate Dietary Type
+            const dietaryDisplayNames = {
+                'halal': 'Halal-friendly',
+                'keto': 'Low-carb high-fat',
+                'kosher': 'Kosher-friendly',
+                'omnivore': 'Balanced diet',
+                'pescatarian': 'Fish-based vegetarian',
+                'vegan': 'Strict plant-based',
+                'vegetarian': 'Plant-based with dairy & eggs',
+            };
+            function getDietaryDisplayName(name) {
+                const lower = name.toLowerCase();
+                for (const [key, label] of Object.entries(dietaryDisplayNames)) {
+                    if (lower.includes(key)) return label;
+                }
+                return name;
+            }
+
             const dietTypeSelect = document.getElementById('dietType');
             dietTypeSelect.innerHTML = '<option value="">Select dietary type</option>';
             let omnivoreId = null;
             apiData.dietaryTypes.forEach(type => {
                 const option = document.createElement('option');
                 option.value = type.dietaryTypeId;
-                option.textContent = type.dietaryTypeName;
+                option.textContent = getDietaryDisplayName(type.dietaryTypeName);
                 dietTypeSelect.appendChild(option);
                 
                 // Find omnivore option
@@ -5193,8 +5231,6 @@
             const formData = {
                 firstName: document.getElementById('firstName').value,
                 lastName: document.getElementById('lastName').value,
-                phone: "", // Optional - can be added to form later
-                email: "", // Optional - can be added to form later
                 gender: document.querySelector('input[name="gender"]:checked').value === 'male' ? 'M' : 'F',
                 activityLevelTypeEnumId: document.getElementById('activity').value,
                 dietaryTypeId: document.getElementById('dietType').value,
