@@ -2545,7 +2545,7 @@
                                     <tr>
                                         <th style="width: 36%;">Options <span style="color: #58838C;">( ~400 kcal)</span></th>
                                         <th style="width: 34%;">Ingredients</th>
-                                        <th style="width: 30%;">Nutritional Benefits</th>
+                                        <th style="width: 30%;">Nutritional Breakdown</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -2741,7 +2741,7 @@
                                     <tr>
                                         <th style="width: 35%;">Options <span style="color: #58838C;">( ~490 kcal)</span></th>
                                         <th style="width: 38%;">Ingredients</th>
-                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                        <th style="width: 27%;">Nutritional Breakdown</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -2942,7 +2942,7 @@
                                     <tr>
                                         <th style="width: 38%;">Options <span style="color: #58838C;">( ~350 kcal)</span></th>
                                         <th style="width: 33%;">Ingredients</th>
-                                        <th style="width: 29%;">Nutritional Benefits</th>
+                                        <th style="width: 29%;">Nutritional Breakdown</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -3064,18 +3064,18 @@
                                 <img src="assets/deep-fit/Snack.png" class="deepfit-meal-icon" alt="Snack">
                                 <div class="deepfit-meal-header-content">
                                     <div class="deepfit-meal-title-row">
-                                        <div class="deepfit-meal-title">SNACK <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                        <div class="deepfit-meal-title">SNACK <span style="font-weight: 700; font-size: 12px;">(Choose Two)</span></div>
                                     </div>
                                     <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
                                 </div>
                             </div>
-                            
+
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
                                         <th style="width: 35%;">Options <span style="color: #58838C;">( ~220 kcal)</span></th>
                                         <th style="width: 38%;">Ingredients</th>
-                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                        <th style="width: 27%;">Nutritional Breakdown</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -5508,7 +5508,7 @@
             [
                 'DIET PLAN', 'Name:', 'Age:', 'Date:', 'Next Check up:', 'Daily Calories:',
                 'DIET TYPE:', 'MEAL 1: BREAKFAST', 'MEAL 1: LUNCH', 'MEAL 2: LUNCH', 'MEAL 2: DINNER', 'MEAL 3: DINNER',
-                'SNACK', '(Choose One)', 'Options', 'Ingredients', 'Nutritional Benefits',
+                'SNACK', '(Choose One)', 'Options', 'Ingredients', 'Nutritional Breakdown',
                 'Protein: ', 'Carbs: ', 'Fats: ',
                 'No ingredients', 'No meal data available', 'No items available'
             ].forEach(k => { if (UI[k]) lookup[k] = UI[k]; });
@@ -5832,7 +5832,7 @@
                                     <tr>
                                         <th style="width: 35%;">Options ${lunchCal ? `<span style="color: #58838C;">( ~${lunchCal} kcal)</span>` : ''}</th>
                                         <th style="width: 38%;">Ingredients</th>
-                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                        <th style="width: 27%;">Nutritional Breakdown</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -5901,7 +5901,7 @@
                                     <tr>
                                         <th style="width: 36%;">Options ${isIF ? (lunchCal ? `<span style="color: #58838C;">( ~${lunchCal} kcal)</span>` : '') : (breakfastCal ? `<span style="color: #58838C;">( ~${breakfastCal} kcal)</span>` : '')}</th>
                                         <th style="width: 36%;">Ingredients</th>
-                                        <th style="width: 28%;">Nutritional Benefits</th>
+                                        <th style="width: 28%;">Nutritional Breakdown</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -5954,7 +5954,7 @@
                                     <tr>
                                         <th style="width: 35%;">Options ${dinnerCal ? `<span style="color: #58838C;">( ~${dinnerCal} kcal)</span>` : ''}</th>
                                         <th style="width: 38%;">Ingredients</th>
-                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                        <th style="width: 27%;">Nutritional Breakdown</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -5994,18 +5994,18 @@
                                 <img src="assets/deep-fit/Snack.png" class="deepfit-meal-icon" alt="Snack">
                                 <div class="deepfit-meal-header-content">
                                     <div class="deepfit-meal-title-row">
-                                        <div class="deepfit-meal-title">SNACK <span style="font-weight: 700; font-size: 12px;">(Choose One)</span></div>
+                                        <div class="deepfit-meal-title">SNACK <span style="font-weight: 700; font-size: 12px;">(${isIF ? 'Choose One' : 'Choose Two'})</span></div>
                                     </div>
                                     <img src="assets/deep-fit/arrow-small.png" class="deepfit-meal-underline" alt="">
                                 </div>
                             </div>
-                            
+
                             <table class="deepfit-table">
                                 <thead>
                                     <tr>
                                         <th style="width: 35%;">Options ${snackCal ? `<span style="color: #58838C;">( ~${snackCal} kcal)</span>` : ''}</th>
                                         <th style="width: 38%;">Ingredients</th>
-                                        <th style="width: 27%;">Nutritional Benefits</th>
+                                        <th style="width: 27%;">Nutritional Breakdown</th>
                                     </tr>
                                 </thead>
                                 <tbody>
