@@ -4004,7 +4004,7 @@
             });
             
             // Conditions to filter out (add condition names here)
-            const excludedConditions = ['Cardiovascular Diseases', 'Diabetes', 'Nut allergy', 'Thyroid Dysfunction', 'GERD (Acid Reflux)', 'hyperkaliemia', 'Oral Allergy Syndrome'];
+            const excludedConditions = ['Cardiovascular Diseases', 'Diabetes', 'Nut allergy', 'Thyroid Dysfunction', 'GERD (Acid Reflux)', 'hyperkaliemia', 'Oral Allergy Syndrome', 'Chronic Kidney Disease'];
             
             
             apiData.conditions.filter(condition => !excludedConditions.includes(condition.conditionName)).forEach(condition => {
