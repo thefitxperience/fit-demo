@@ -5318,10 +5318,24 @@
 
             try {
                 // Send data to API
-                const response = await fetch(`${API_CONFIG.baseUrl}/v3/generate`, {
+                const GENERATOR_URL = 'https://fit-generator.andyayas27.workers.dev/generate';
+                const dietPlanStyle = document.querySelector('input[name="dietPlan"]:checked')?.value;
+                const generatorBody = {
+                    dietaryTypeId: formData.dietaryTypeId,
+                    secondaryTypeId: dietPlanStyle === 'if' ? 'IntermittentFasting' : 'Normal',
+                    goal: document.querySelector('input[name="goal"]:checked')?.value || 'maintain',
+                    kilocalorieNeeded: formData.kilocalorieNeeded,
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    allergyNames: (formData.allergyIdSet || []).map(id =>
+                        (apiData.allergies.find(a => String(a.allergyId) === String(id)) || {}).allergyName).filter(Boolean),
+                    conditionNames: (formData.conditionIdSet || []).map(id =>
+                        (apiData.conditions.find(c => String(c.conditionId) === String(id)) || {}).conditionName).filter(Boolean),
+                };
+                const response = await fetch(GENERATOR_URL, {
                     method: 'POST',
-                    headers: API_CONFIG.headers,
-                    body: JSON.stringify(formData)
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(generatorBody)
                 });
 
                 // Get response text first to see error details
@@ -5336,6 +5350,24 @@
                 // Parse JSON response
                 const responseData = JSON.parse(responseText);
                 console.log('API Response:', responseData);
+
+                if (window.arTranslations) {
+                    const T = window.arTranslations;
+                    T.food = T.food || {}; T.ingredients = T.ingredients || {}; T.descriptions = T.descriptions || {};
+                    for (const groups of Object.values(responseData.foodDishByCategoryMap || {})) {
+                        for (const classifications of Object.values(groups || {})) {
+                            for (const items of Object.values(classifications || {})) {
+                                for (const it of (items || [])) {
+                                    if (it.foodDishName && it.foodDishNameAr) T.food[it.foodDishName] = it.foodDishNameAr;
+                                    if (it.description && it.descriptionAr) T.descriptions[it.description] = it.descriptionAr;
+                                    for (const ing of (it.ingredientList || [])) {
+                                        if (ing.ingredientName && ing.ingredientNameAr) T.ingredients[ing.ingredientName] = ing.ingredientNameAr;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 
                 // Add form data text values to response for PDF display
                 const goalRadio = document.querySelector('input[name="goal"]:checked');
@@ -5536,6 +5568,11 @@
             container.querySelectorAll('.deepfit-option-desc').forEach(el => {
                 const k = el.textContent.trim();
                 if (DESCS[k]) el.textContent = DESCS[k];
+            });
+
+            // Ingredient serving amounts
+            container.querySelectorAll('.ing-amt[data-ar]').forEach(el => {
+                el.textContent = el.getAttribute('data-ar');
             });
 
             // Long intro paragraphs
@@ -5759,18 +5796,9 @@
                                     const sortedIngredients = [...item.ingredientList].sort((a, b) => b.quantity - a.quantity);
                                     
                                     ingredientsList = sortedIngredients.map(ing => {
-                                        if (ing.quantityUomId === 'WT_g') {
-                                            const ingName = ing.ingredientName.toLowerCase();
-                                            if (ingName.includes('egg white')) {
-                                                const count = Math.round(ing.quantity / 30);
-                                                return `<li>${ing.ingredientName}: ${count} ${count === 1 ? 'egg white' : 'egg whites'}</li>`;
-                                            } else if (ingName.includes('egg')) {
-                                                const count = Math.round(ing.quantity / 50);
-                                                return `<li>${ing.ingredientName}: ${count} ${count === 1 ? 'egg' : 'eggs'}</li>`;
-                                            }
-                                            return `<li>${ing.ingredientName}: ${ing.quantity} g</li>`;
-                                        }
-                                        return `<li>${ing.ingredientName}: ${ing.quantity} ${ing.quantityUomId}</li>`;
+                                        const amt = ing.displayAmount || `${ing.quantity} ${ing.quantityUomId === 'WT_g' ? 'g' : ing.quantityUomId}`;
+                                        const amtAr = ing.displayAmountAr || amt;
+                                        return `<li>${ing.ingredientName}: <span class="ing-amt" data-ar="${amtAr}">${amt}</span></li>`;
                                     }).join('');
                                 }
                                 if (!ingredientsList) {
