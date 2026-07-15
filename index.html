@@ -5321,11 +5321,11 @@
             try {
                 // Send data to API
                 const GENERATOR_URL = 'https://fit-generator.andyayas27.workers.dev/generate';
-                const dietPlanStyle = document.querySelector('input[name="dietPlan"]:checked')?.value;
+                const dietPlanStyle = document.querySelector('input[name="dietPlan"]:checked')?.id;
                 const generatorBody = {
                     dietaryTypeId: formData.dietaryTypeId,
                     secondaryTypeId: dietPlanStyle === 'if' ? 'IntermittentFasting' : 'Normal',
-                    goal: document.querySelector('input[name="goal"]:checked')?.value || 'maintain',
+                    goal: document.querySelector('input[name="goal"]:checked')?.id || 'maintain',
                     kilocalorieNeeded: formData.kilocalorieNeeded,
                     firstName: formData.firstName,
                     lastName: formData.lastName,
