@@ -1,6 +1,6 @@
 {
   "appId": "com.fit.dietsimulator",
-  "appName": "FIT Demo",
+  "appName": "UDRA Demo",
   "webDir": "www",
   "server": {
     "cleartext": true,
